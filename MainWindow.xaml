@@ -1,0 +1,25 @@
+﻿<Window x:Class="vr6Motion.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:vr6Motion"
+        mc:Ignorable="d"
+        Closing="Window_Closing"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="87*"/>
+            <ColumnDefinition Width="73*"/>
+        </Grid.ColumnDefinitions>
+        <ComboBox x:Name="comboxSelectPort" HorizontalAlignment="Left" Margin="124,36,0,0" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="selPortLabel" Content="Select Port:" HorizontalAlignment="Left" Margin="48,34,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="connectPortBtn" Content="Connect" HorizontalAlignment="Left" Margin="282,37,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.125,1.204" MouseLeftButtonDown="connectPortBtn_MouseLeftButtonDown" MouseLeave="connectPortBtn_MouseLeave" PreviewMouseLeftButtonDown="connectPortBtn_PreviewMouseLeftButtonDown" PreviewMouseLeftButtonUp="connectPortBtn_PreviewMouseLeftButtonUp"   />
+        <CheckBox x:Name="led13CheckBox" Content="LED13" HorizontalAlignment="Left" Margin="124,102,0,0" VerticalAlignment="Top"  Checked="led13CheckBox_Checked" Unchecked="led13CheckBox_Unchecked"/>
+        <Button x:Name="DeadZoneP" Content="+" HorizontalAlignment="Left" Margin="151,136,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="DeadZoneP_Click"/>
+        <Button x:Name="DeadZoneN" Content="-" HorizontalAlignment="Left" Margin="128,136,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="DeadZoneN_Click"/>
+        <TextBox x:Name="DeadZoneValue" HorizontalAlignment="Left" Margin="82,137,0,0" Text="0" TextWrapping="NoWrap"  VerticalAlignment="Top" Width="35" TextChanged="TextBox_TextChanged" Height="22"/>
+        <Label x:Name="DeadZoneLable" Content="DeadZone=" HorizontalAlignment="Left" Margin="9,133,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
+
+    </Grid>
+</Window>
