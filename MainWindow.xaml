@@ -14,7 +14,7 @@
         </Grid.ColumnDefinitions>
         <ComboBox x:Name="comboxSelectPort" HorizontalAlignment="Left" Margin="124,36,0,0" VerticalAlignment="Top" Width="120"/>
         <Label x:Name="selPortLabel" Content="Select Port:" HorizontalAlignment="Left" Margin="48,34,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="connectPortBtn" Content="Connect" HorizontalAlignment="Left" Margin="282,37,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.125,1.204" MouseLeftButtonDown="connectPortBtn_MouseLeftButtonDown" MouseLeave="connectPortBtn_MouseLeave" PreviewMouseLeftButtonDown="connectPortBtn_PreviewMouseLeftButtonDown" PreviewMouseLeftButtonUp="connectPortBtn_PreviewMouseLeftButtonUp"   />
+        <Button x:Name="connectPortBtn" Content="Connect" HorizontalAlignment="Left" Margin="282,37,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.125,1.204" PreviewMouseLeftButtonDown="connectPortBtn_PreviewMouseLeftButtonDown" PreviewMouseLeftButtonUp="connectPortBtn_PreviewMouseLeftButtonUp"   />
         <CheckBox x:Name="led13CheckBox" Content="LED13" HorizontalAlignment="Left" Margin="124,102,0,0" VerticalAlignment="Top"  Checked="led13CheckBox_Checked" Unchecked="led13CheckBox_Unchecked"/>
         <Button x:Name="DeadZoneP" Content="+" HorizontalAlignment="Left" Margin="151,136,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="DeadZoneP_Click"/>
         <Button x:Name="DeadZoneN" Content="-" HorizontalAlignment="Left" Margin="128,136,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="DeadZoneN_Click"/>

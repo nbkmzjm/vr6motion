@@ -91,7 +91,7 @@ namespace vr6Motion
                 enabledControls(true);
                 //string selectedPort = comboxSelectPort.SelectedItem.ToString();
                 
-                port = new SerialPort("COM4", 500000, Parity.None, 8, StopBits.One);
+                port = new SerialPort("COM7", 500000, Parity.None, 8, StopBits.One);
                 port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
                 port.Open();
                 port.Write("START\n");
@@ -132,6 +132,8 @@ namespace vr6Motion
         private void enabledControls(bool state)
         {
             led13CheckBox.IsEnabled = state;
+            DeadZoneN.IsEnabled = state;
+            DeadZoneP.IsEnabled = state;
         }
 
         
@@ -153,47 +155,28 @@ namespace vr6Motion
 
         private void DeadZoneP_Click(object sender, RoutedEventArgs e)
         {
-            if (port.IsOpen)
-            {
-                port.Write("led13on\n");
-                //Debug.Write("checked");
-                //port.Write("[V45]");
-            }
+
+            DeadZoneValue.Text = DeadZoneValue.Text + 1;
+            port.Write("led13on\n");
+            //Debug.Write("checked");
+            //port.Write("[V45]");
+            
         }
 
         private void DeadZoneN_Click(object sender, RoutedEventArgs e)
         {
-            if (port.IsOpen)
-            {
-                port.Write("led13of\n");
-                //Debug.Write("unchecked");
-                //port.Write("[V45]");
-            }
+            port.Write("led13of\n");
+            //Debug.Write("unchecked");
+            //port.Write("[V45]");
+            
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
 
         }
-
-
-
-        private void connectPortBtn_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            Debug.Write("u");
-           
-        }
-
-        private void connectPortBtn_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-
-            Debug.Write("d");
-        }
-
-        private void connectPortBtn_MouseLeave(object sender, MouseEventArgs e)
-        {
-            Debug.Write("d");
-        }
+               
+       
 
         private void connectPortBtn_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
