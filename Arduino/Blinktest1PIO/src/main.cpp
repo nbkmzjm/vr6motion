@@ -10,7 +10,7 @@
 unsigned int RxByte[2] = {0};      // Current byte received from each of the two comm ports
 int BufferEnd[2] = {-1};           // Rx Buffer end index for each of the two comm ports
 unsigned int RxBuffer[5][2] = {0}; // 5 byte Rx Command Buffer for each of the two comm ports
-byte errorcount =0;
+byte errorcount = 0;
 String inputString = ""; // a String to hold incoming data
 
 int led13 = 0; //Starup Value
@@ -18,7 +18,7 @@ int led13 = 0; //Starup Value
 void setup()
 {
   // initialize serial:
-  Serial.begin(500000);
+  Serial.begin(9600);
   // reserve 200 bytes for the inputString:
   inputString.reserve(200);
   pinMode(LED_BUILTIN, OUTPUT);
@@ -40,13 +40,17 @@ void ReadEEProm()
   led13 = EEPROM.read(1);
 }
 
-void ParseCommand(int comPort)
+void ParseCommand(int ComPort)
 {
   // print the string when a newline arrives:
 
-  switch (RxBuffer[0] [comPort])
-  {
+  switch (RxBuffer[0][ComPort])
+  { 
+    case 'A':
+      Serial.write('A');
     
+
+
   }
   // if (stringComplete)
   // {
@@ -80,6 +84,7 @@ void CheckSerial0()
 {
   while (Serial.available())
   {
+    
     if (BufferEnd[COM0] == -1)
     {
       RxByte[COM0] = Serial.read();
@@ -95,9 +100,11 @@ void CheckSerial0()
     }
     else
     {
+      
       RxByte[COM0] = Serial.read();
       RxBuffer[BufferEnd[COM0]][COM0] = RxByte[COM0];
       BufferEnd[COM0]++;
+      
       if (BufferEnd[COM0] > 3)
       {
         if (RxBuffer[3][COM0] == END_BYTE)
@@ -118,12 +125,6 @@ void loop()
 {
   ReadEEProm();
   digitalWrite(LED_BUILTIN, led13);
-
+ 
   CheckSerial0();
 }
-
-/*
-  SerialEvent occurs whenever a new data comes in the hardware serial RX. This
-  routine is run between each time loop() runs, so using delay inside loop can
-  delay response. Multiple bytes of data may be available.
-*/

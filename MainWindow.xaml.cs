@@ -65,9 +65,9 @@ namespace vr6Motion
             Thread.Sleep(500);
             SerialPort sp = (SerialPort)sender;
             String serialData = sp.ReadExisting();
-            Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(SerialDataProcess), serialData);
-            //SerialDataProcess(serialData);
+            //Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(SerialDataProcess), serialData);
             Debug.Write(serialData);
+
 
         }
 
@@ -75,8 +75,8 @@ namespace vr6Motion
 
         private void SerialDataProcess(String serialdata)
         {
-           
-            DeadZoneValue.Text = serialdata;
+            
+            //DeadZoneValue.Text = serialdata;
             
 
         }
@@ -91,7 +91,7 @@ namespace vr6Motion
                 enabledControls(true);
                 //string selectedPort = comboxSelectPort.SelectedItem.ToString();
                 
-                port = new SerialPort("COM7", 500000, Parity.None, 8, StopBits.One);
+                port = new SerialPort("COM7", 9600, Parity.None, 8, StopBits.One);
                 port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
                 port.Open();
                 port.Write("START\n");
@@ -155,12 +155,28 @@ namespace vr6Motion
 
         private void DeadZoneP_Click(object sender, RoutedEventArgs e)
         {
-
-            DeadZoneValue.Text = DeadZoneValue.Text + 1;
-            port.Write("led13on\n");
-            //Debug.Write("checked");
-            //port.Write("[V45]");
+            //int dz = 65;
+            //char x= (char)dz;
+            //DeadZoneValue.Text = DeadZoneValue.Text + 1;
+            //String sendData = "[" + char.ToString(x) + char.ToString(x) + char.ToString(x) + "]";
+            sendData("A", 5, 15);
             
+            
+
+
+        }
+
+        private void sendData(string header, int val1, int val2)
+        {
+            String sendData;
+            char valOne = (char)val1;
+            char valTwo = (char)val2;
+
+
+            sendData = "["+header + char.ToString(valOne) + char.ToString(valOne) + "]";
+
+
+            port.Write(sendData);
         }
 
         private void DeadZoneN_Click(object sender, RoutedEventArgs e)
