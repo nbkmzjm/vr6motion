@@ -16,10 +16,14 @@
         <Label x:Name="selPortLabel" Content="Select Port:" HorizontalAlignment="Left" Margin="48,34,0,0" VerticalAlignment="Top"/>
         <Button x:Name="connectPortBtn" Content="Connect" HorizontalAlignment="Left" Margin="282,37,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.125,1.204" PreviewMouseLeftButtonDown="connectPortBtn_PreviewMouseLeftButtonDown" PreviewMouseLeftButtonUp="connectPortBtn_PreviewMouseLeftButtonUp"   />
         <CheckBox x:Name="led13CheckBox" Content="LED13" HorizontalAlignment="Left" Margin="124,102,0,0" VerticalAlignment="Top"  Checked="led13CheckBox_Checked" Unchecked="led13CheckBox_Unchecked"/>
-        <Button x:Name="DeadZoneP" Content="+" HorizontalAlignment="Left" Margin="151,136,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="DeadZoneP_Click"/>
-        <Button x:Name="DeadZoneN" Content="-" HorizontalAlignment="Left" Margin="128,136,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="DeadZoneN_Click"/>
-        <TextBox x:Name="DeadZoneValue" HorizontalAlignment="Left" Margin="82,137,0,0" Text="0" TextWrapping="NoWrap"  VerticalAlignment="Top" Width="35" TextChanged="TextBox_TextChanged" Height="22"/>
-        <Label x:Name="DeadZoneLable" Content="DeadZone=" HorizontalAlignment="Left" Margin="9,133,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
+        <Button x:Name="DeadZone1P" Content="+" HorizontalAlignment="Left" Margin="151,136,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="DeadZone1P_Click"/>
+        <Button x:Name="DeadZone1N" Content="-" HorizontalAlignment="Left" Margin="128,136,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="DeadZone1N_Click"/>
+        <TextBox x:Name="DeadZoneValue1" HorizontalAlignment="Left" Margin="82,137,0,0" Text="0" TextWrapping="NoWrap"  VerticalAlignment="Top" Width="35" TextChanged="TextBox_TextChanged" Height="22"/>
+        <Label x:Name="DeadZoneLable1" Content="DeadZone1=" HorizontalAlignment="Left" Margin="9,133,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
+        <Label x:Name="DeadZoneLable2" Content="DeadZone2=" HorizontalAlignment="Left" Margin="9,159,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
+        <TextBox x:Name="DeadZoneValue2" HorizontalAlignment="Left" Margin="82,159,0,0" Text="0" TextWrapping="NoWrap"  VerticalAlignment="Top" Width="35" TextChanged="TextBox_TextChanged" Height="22"/>
+        <Button x:Name="DeadZone2P" Content="+" HorizontalAlignment="Left" Margin="151,162,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="DeadZone2P_Click"/>
+        <Button x:Name="DeadZone2N" Content="-" HorizontalAlignment="Left" Margin="128,162,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="DeadZone2N_Click"/>
 
     </Grid>
 </Window>

@@ -13,7 +13,8 @@ unsigned int RxBuffer[5][2] = {0}; // 5 byte Rx Command Buffer for each of the t
 byte errorcount = 0;
 String inputString = ""; // a String to hold incoming data
 
-int led13 = 0; //Starup Value
+int DeadZone1 = 65; //Starup Value
+int DeadZone2 = 66;
 
 void setup()
 {
@@ -24,20 +25,53 @@ void setup()
   pinMode(LED_BUILTIN, OUTPUT);
 }
 
+void SendTwoValues(int id, int v1, int v2, int ComPort)
+{
+    if (ComPort == 0)
+    {
+        Serial.write(START_BYTE);
+        Serial.write(id);
+        Serial.write(v1);
+        Serial.write(v2);
+        Serial.write(END_BYTE);
+    }
+}
+
+void SendValue(int id, int value, int ComPort)
+{
+    int low, high;
+
+    high = value / 256;
+    low = value - (high * 256);
+
+    if (ComPort == 0)
+    {
+        Serial.write(START_BYTE);
+        Serial.write(id);
+        Serial.write(high);
+        Serial.write(low);
+        Serial.write(END_BYTE);
+    }
+  }
+
 void WriteEEProm()
 {
   EEPROM.write(0, 114);
-  EEPROM.write(1, led13);
+  EEPROM.write(1, DeadZone1);
+  EEPROM.write(2, DeadZone2);
 }
 
 void ReadEEProm()
 {
   int evalue = EEPROM.read(0);
-  if (evalue != 114)
+  if (evalue != 115)
   {
     WriteEEProm();
+    return;
   }
-  led13 = EEPROM.read(1);
+  DeadZone1 = EEPROM.read(1);
+  DeadZone2 = EEPROM.read(2);
+  
 }
 
 void ParseCommand(int ComPort)
@@ -46,8 +80,30 @@ void ParseCommand(int ComPort)
 
   switch (RxBuffer[0][ComPort])
   { 
-    case 'A':
-      Serial.write('A');
+    case 'D':
+      DeadZone1 = RxBuffer[1][ComPort];
+      DeadZone2 = RxBuffer[2][ComPort];
+      break;
+
+    case 'r':
+      if(RxBuffer[1][ComPort]=='d'){
+        switch (RxBuffer[2][ComPort])
+        {
+        case 'D':
+          SendTwoValues('D', DeadZone1, DeadZone2, ComPort);
+          SendTwoValues('Q', 'E', 'F', ComPort);
+          SendTwoValues('S', 'G', 'H', ComPort);
+          SendTwoValues('Z', 'T', 'B', ComPort);
+
+          break;
+        }
+      }
+    case 's':
+      if(RxBuffer[0][ComPort]=='a' && RxBuffer[0][ComPort]=='v'){
+        WriteEEProm();
+        break;
+      }
+
     
 
 
@@ -124,7 +180,8 @@ void CheckSerial0()
 void loop()
 {
   ReadEEProm();
-  digitalWrite(LED_BUILTIN, led13);
+  // digitalWrite(LED_BUILTIN, led13);
  
   CheckSerial0();
+  delay(100);
 }

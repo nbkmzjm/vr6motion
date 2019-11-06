@@ -64,20 +64,45 @@ namespace vr6Motion
         {
             Thread.Sleep(500);
             SerialPort sp = (SerialPort)sender;
-            String serialData = sp.ReadExisting();
-            //Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(SerialDataProcess), serialData);
-            Debug.Write(serialData);
+            //byte[] buffer = new byte[3];
+            //int len = 0;
+            //while (len < 3)
+            //{
+            //    len += sp.Read(buffer, 0, 3 - len);
+            //}
 
+
+            byte[] data = new byte[sp.BytesToRead];
+            sp.Read(data, 0, data.Length);
+            Debug.WriteLine(Encoding.Default.GetString(data));
+            Debug.WriteLine(data[0]);
+            Debug.WriteLine(data[1]);
+            Debug.WriteLine(data[2]);
+            Debug.WriteLine(data[3]);
+            Debug.WriteLine(data[4]);
+            Debug.WriteLine(data[5]);
+
+            //Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(SerialDataProcess), serialData);
 
         }
-
-
-
+        
         private void SerialDataProcess(String serialdata)
         {
-            
+
+            //char charData = 'a';
+            //byte[] buffer = new byte[3];
+            //int len = 0;
+            //while (len < 3)
+            //{
+            //    len += serialPort1.Read(buffer, 0, 3 - len);
+            //}
+
+
+
+
+            Debug.WriteLine(serialdata);
             //DeadZoneValue.Text = serialdata;
-            
+
 
         }
 
@@ -97,10 +122,6 @@ namespace vr6Motion
                 port.Write("START\n");
                 connectPortBtn.Content = "Disconnect";
                 comboxSelectPort.IsEnabled = false;
-
-                
-
-
             }
             else
             {
@@ -108,18 +129,15 @@ namespace vr6Motion
             }
         }
 
-
-
         private void DisconnectToArdu()
         {
             isConnected = false;
             enabledControls(false);
             comboxSelectPort.IsEnabled = true;
             connectPortBtn.Content = "Connect";
-            port.Write("#STOP\n");
+            //port.Write("#STOP\n");
             port.Close();
         }
-
        
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -132,58 +150,47 @@ namespace vr6Motion
         private void enabledControls(bool state)
         {
             led13CheckBox.IsEnabled = state;
-            DeadZoneN.IsEnabled = state;
-            DeadZoneP.IsEnabled = state;
+            DeadZone1N.IsEnabled = state;
+            DeadZone1P.IsEnabled = state;
+            DeadZone2N.IsEnabled = state;
+            DeadZone2P.IsEnabled = state;
         }
-
         
         private void led13CheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            
             //DeadZoneValue.Text = "2";
-            
         }
 
         private void led13CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            
             //port.Write("[V21]");
-            
         }
 
         
 
-        private void DeadZoneP_Click(object sender, RoutedEventArgs e)
+        private void DeadZone1P_Click(object sender, RoutedEventArgs e)
         {
             //int dz = 65;
             //char x= (char)dz;
             //DeadZoneValue.Text = DeadZoneValue.Text + 1;
             //String sendData = "[" + char.ToString(x) + char.ToString(x) + char.ToString(x) + "]";
-            sendData("A", 5, 15);
-            
-            
-
-
+            sendDataNum("A", 69, 70);
         }
 
-        private void sendData(string header, int val1, int val2)
+        private void sendDataNum(string header, int val1, int val2)
         {
             String sendData;
             char valOne = (char)val1;
             char valTwo = (char)val2;
 
-
-            sendData = "["+header + char.ToString(valOne) + char.ToString(valOne) + "]";
-
-
+            sendData = "["+header + char.ToString(valOne) + char.ToString(valTwo) + "]";
             port.Write(sendData);
         }
 
-        private void DeadZoneN_Click(object sender, RoutedEventArgs e)
+
+        private void DeadZone1N_Click(object sender, RoutedEventArgs e)
         {
             port.Write("led13of\n");
-            //Debug.Write("unchecked");
-            //port.Write("[V45]");
             
         }
 
@@ -191,8 +198,6 @@ namespace vr6Motion
         {
 
         }
-               
-       
 
         private void connectPortBtn_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -203,8 +208,18 @@ namespace vr6Motion
         {
             if (connectPortBtn.Content == "Disconnect")
             {
-                port.Write("START\n");
+                port.Write("[rdD]");
             }
+        }
+
+        private void DeadZone2N_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DeadZone2P_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
