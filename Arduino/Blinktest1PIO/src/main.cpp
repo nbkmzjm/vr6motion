@@ -56,7 +56,7 @@ void SendValue(int id, int value, int ComPort)
 
 void WriteEEProm()
 {
-  EEPROM.write(0, 114);
+  EEPROM.write(0, 116);
   EEPROM.write(1, DeadZone1);
   EEPROM.write(2, DeadZone2);
 }
@@ -64,7 +64,7 @@ void WriteEEProm()
 void ReadEEProm()
 {
   int evalue = EEPROM.read(0);
-  if (evalue != 115)
+  if (evalue != 116)
   {
     WriteEEProm();
     return;
@@ -80,7 +80,7 @@ void ParseCommand(int ComPort)
 
   switch (RxBuffer[0][ComPort])
   { 
-    case 'D':
+    case 'A':
       DeadZone1 = RxBuffer[1][ComPort];
       DeadZone2 = RxBuffer[2][ComPort];
       break;
@@ -91,16 +91,14 @@ void ParseCommand(int ComPort)
         {
         case 'D':
           SendTwoValues('D', DeadZone1, DeadZone2, ComPort);
-          SendTwoValues('Q', 'E', 'F', ComPort);
-          SendTwoValues('S', 'G', 'H', ComPort);
-          SendTwoValues('Z', 'T', 'B', ComPort);
-
+          
           break;
         }
       }
     case 's':
-      if(RxBuffer[0][ComPort]=='a' && RxBuffer[0][ComPort]=='v'){
+      if(RxBuffer[1][ComPort]=='a' && RxBuffer[2][ComPort]=='v'){
         WriteEEProm();
+//        SendTwoValues('X', 'x', 'x', ComPort);
         break;
       }
 

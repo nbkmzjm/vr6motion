@@ -64,46 +64,33 @@ namespace vr6Motion
         {
             Thread.Sleep(500);
             SerialPort sp = (SerialPort)sender;
-            //byte[] buffer = new byte[3];
-            //int len = 0;
-            //while (len < 3)
-            //{
-            //    len += sp.Read(buffer, 0, 3 - len);
-            //}
+            string data = sp.ReadTo("]");
 
 
-            byte[] data = new byte[sp.BytesToRead];
-            sp.Read(data, 0, data.Length);
-            Debug.WriteLine(Encoding.Default.GetString(data));
-            Debug.WriteLine(data[0]);
-            Debug.WriteLine(data[1]);
-            Debug.WriteLine(data[2]);
-            Debug.WriteLine(data[3]);
-            Debug.WriteLine(data[4]);
-            Debug.WriteLine(data[5]);
 
-            //Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(SerialDataProcess), serialData);
+            Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(SerialDataProcess), data);
 
         }
         
-        private void SerialDataProcess(String serialdata)
+        private void SerialDataProcess(String data)
         {
+            Debug.WriteLine(data);
 
-            //char charData = 'a';
-            //byte[] buffer = new byte[3];
-            //int len = 0;
-            //while (len < 3)
-            //{
-            //    len += serialPort1.Read(buffer, 0, 3 - len);
-            //}
+            byte[] bytes = Encoding.ASCII.GetBytes(data);
+            Debug.WriteLine(char.ToString((char)bytes[0]));
+            if (char.ToString((char)bytes[0]) == "[")
+            {
+                switch (char.ToString((char)bytes[1]))
+                {
+                    case "D":
+                        DeadZoneValue1.Text = bytes[2].ToString();
+                        Debug.WriteLine(bytes[2].ToString());
+                        DeadZoneValue2.Text = bytes[3].ToString();
+                        break;
+                }
 
-
-
-
-            Debug.WriteLine(serialdata);
-            //DeadZoneValue.Text = serialdata;
-
-
+            }
+           
         }
 
 
@@ -116,7 +103,7 @@ namespace vr6Motion
                 enabledControls(true);
                 //string selectedPort = comboxSelectPort.SelectedItem.ToString();
                 
-                port = new SerialPort("COM7", 9600, Parity.None, 8, StopBits.One);
+                port = new SerialPort("COM14", 9600, Parity.None, 8, StopBits.One);
                 port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
                 port.Open();
                 port.Write("START\n");
@@ -135,7 +122,6 @@ namespace vr6Motion
             enabledControls(false);
             comboxSelectPort.IsEnabled = true;
             connectPortBtn.Content = "Connect";
-            //port.Write("#STOP\n");
             port.Close();
         }
        
@@ -174,7 +160,9 @@ namespace vr6Motion
             //char x= (char)dz;
             //DeadZoneValue.Text = DeadZoneValue.Text + 1;
             //String sendData = "[" + char.ToString(x) + char.ToString(x) + char.ToString(x) + "]";
-            sendDataNum("A", 69, 70);
+            sendDataNum("A", 78, 79);
+            port.Write("[sav]");
+            port.Write("[rdD]");
         }
 
         private void sendDataNum(string header, int val1, int val2)
