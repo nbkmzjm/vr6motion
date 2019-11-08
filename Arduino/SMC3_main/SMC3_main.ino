@@ -98,7 +98,7 @@ unsigned long TimesUp=0;           // Counter used to see if it's time to calcul
 int Feedback1 = 512;
 int Feedback2 = 512;
 int Feedback3 = 512;
-int Target1 = 300;
+int Target1 = 512;
 int Target2 = 512;
 int Target3 = 512;
 int PotInput = 512;
@@ -225,14 +225,9 @@ SoftwareSerial mySerial(12, 13);    // RX, TX
 #endif
 
 #ifdef MODE3
-#include <Kangaroo.h>
-
-#define TX_PIN 13
-#define RX_PIN 12
-SoftwareSerial  mySerial(RX_PIN, TX_PIN);
-KangarooSerial  K(mySerial);
-KangarooChannel K1(K, '1');
-KangarooChannel K2(K, '2');
+SoftwareSerial mySerial(12, 13);    // RX, TX
+#include <Sabertooth.h>
+Sabertooth ST[2] = { Sabertooth(128, mySerial), Sabertooth(129, mySerial), };
 
 #endif
 
@@ -370,27 +365,17 @@ void DisableMotor3();
 //          
 //****************************************************************************************************************
 
-const byte calibrateBtn = 3;
-const byte limitUp1 =7; 
-const byte limitDown1 =6;
-const byte limitUp2 =A5; 
-const byte limitDown2 =A4;
-const byte ledPin = 2;
-const byte targetPot =A0;
-
-int calibrateState = 0; 
+const int limitUp1 =7; 
+const int limitDown1 =6;
+const int limitUp2 =5; 
+const int limitDown2 =4;
+const int ledPin = 2;
 int limitUpState1 = 0; 
 int limitDownState1 = 0; 
 int limitUpState2 = 0; 
 int limitDownState2 = 0;
-int motorOut1 = 0;
-int deltaPos = 0;
-int accumDeltaPos = 0;
 unsigned long previousMillis = 0;
 unsigned long previousMillis2 = 0;
-boolean calibrated = false;
-int Target = 500;
-
 void setup()
 
 
@@ -400,10 +385,6 @@ void setup()
 #endif    
 #ifdef MODE3
 {
-   pinMode(targetPot, INPUT);
-  pinMode (calibrateBtn,INPUT_PULLUP);
-//  attachInterrupt(digitalPinToInterrupt(encoder1A), encoder1, CHANGE);
-//  encoderLastState1 = digitalRead(encoder1A);  
   pinMode(ledPin, OUTPUT);
   pinMode(limitUp1, INPUT);
   pinMode(limitDown1, INPUT);
@@ -414,8 +395,14 @@ void setup()
   digitalWrite(limitUp2, HIGH);
   digitalWrite(limitDown2, HIGH);
   
+  pinMode(8, INPUT_PULLUP);
+  pinMode(9, INPUT_PULLUP);
+  pinMode(10, INPUT_PULLUP);
+  pinMode(11, INPUT_PULLUP);
+  pinMode(12, INPUT_PULLUP);
+  
   if (digitalRead(8) == HIGH){
-    Serial.begin(19200);   
+    Serial.begin(500000);   
   }
 else
 {
@@ -423,33 +410,32 @@ else
 }
   if (digitalRead(9) == LOW){
     mySerial.begin(19200);
-//    ST[0].setBaudRate(115200);
-//    ST[1].setBaudRate(115200);
+    ST[0].setBaudRate(115200);
+    ST[1].setBaudRate(115200);
     mySerial.end();
   }
   else if (digitalRead(10) == LOW){  
     mySerial.begin(38400);
-//    ST[0].setBaudRate(115200);
-//    ST[1].setBaudRate(115200);
+    ST[0].setBaudRate(115200);
+    ST[1].setBaudRate(115200);
     mySerial.end();
   }  
   else
   {
-    mySerial.begin(19200);
-     mySerial.listen();
-     K1.start();
-     K1.units(10, 250);
-     K1.home();
+    mySerial.begin(9600);
+    ST[0].setBaudRate(115200);
+    ST[1].setBaudRate(115200);
+    mySerial.end();
   } 
   
-//   mySerial.begin(115200);
+   mySerial.begin(115200);
    
   if (digitalRead(11) == HIGH){
-//    ST[0].setTimeout(100);
+    ST[0].setTimeout(100);
   }
-//   if (digitalRead(12) == HIGH){
-//    ST[1].setTimeout(100);
-//  }
+   if (digitalRead(12) == HIGH){
+    ST[1].setTimeout(100);
+  }
  
 #endif
     OutputPort=PORTD;
@@ -1521,106 +1507,80 @@ void SetOutputsMotor3()   // MODE2
 
 void SetOutputsMotor1()     // MODE3
 {
-//    if((Feedback1 > InputClipMax1) && (PWMrev1 != 0))
-//    {
-//        PWMout1 = PWMrev1;
-//        ST[0].motor(1,(constrain((PWMout1/2),-127,127)));    
-//    }
-//    else if((Feedback1<InputClipMin1) && (PWMrev1 != 0))
-//    {
-//        PWMout1 = PWMrev1;
-//        ST[0].motor(1,(constrain(0-(PWMout1/2),-127,127)));    
-//    }  
-//    else if((Target1 > (Feedback1 + DeadZone1)) || (Target1 < (Feedback1 - DeadZone1)))
-//    {
-//        if (PWMout1 >= 0)  
-//        {                                    
-//            // Drive Motor Forward 
-//            PWMout1+=PWMoffset1;
-//            if(PWMout1 > (PWMmax1+LiftFactor1)){PWMout1=PWMmax1+LiftFactor1;}
-//            ST[0].motor(1,(constrain(0-(PWMout1/2),-127,127)));    
-//        }  
-//        else 
-//        {                                              
-//            // Drive Motor Backwards 
-//            PWMout1 = abs(PWMout1);
-//            PWMout1+=PWMoffset1;
-//            if(PWMout1 > PWMmax1){PWMout1=PWMmax1;}
-//            ST[0].motor(1,(constrain((PWMout1/2),-127,127)));    
-//        }
-//    }
-//    else
-//    {
-//        // Brake Motor 
-//        PWMout1=PWMoffset1;
-//        ST[0].motor(1,0);    
-//    }
-
-if (PWMout1 >= 0)  
-        {     
-            Serial.println("FFFFFFFFFFFFFFFFFFFFFFFF");                         
+    if((Feedback1 > InputClipMax1) && (PWMrev1 != 0))
+    {
+        PWMout1 = PWMrev1;
+        ST[0].motor(1,(constrain((PWMout1/2),-127,127)));    
+    }
+    else if((Feedback1<InputClipMin1) && (PWMrev1 != 0))
+    {
+        PWMout1 = PWMrev1;
+        ST[0].motor(1,(constrain(0-(PWMout1/2),-127,127)));    
+    }  
+    else if((Target1 > (Feedback1 + DeadZone1)) || (Target1 < (Feedback1 - DeadZone1)))
+    {
+        if (PWMout1 >= 0)  
+        {                                    
             // Drive Motor Forward 
             PWMout1+=PWMoffset1;
             if(PWMout1 > (PWMmax1+LiftFactor1)){PWMout1=PWMmax1+LiftFactor1;}
-//            ST[0].motor(1,(constrain(0-(PWMout1/2),-127,127)));   
-//           PWMout1 = map(PWMout1, -255, 255, -500, 500);
-//            K1.s((constrain((PWMout1*2),-500,500)));
-//            K1.s(-PWMout1);
+            ST[0].motor(1,(constrain(0-(PWMout1/2),-127,127)));    
         }  
         else 
-        {                            
-            Serial.println("BBBBBBBBBBBBBBBBBBBBBBBBBBB");                   
+        {                                              
             // Drive Motor Backwards 
             PWMout1 = abs(PWMout1);
             PWMout1+=PWMoffset1;
             if(PWMout1 > PWMmax1){PWMout1=PWMmax1;}
-//            ST[0].motor(1,(constrain((PWMout1/2),-127,127))); 
-//            K1.s(constrain(0-(PWMout1*2),-300,300)); 
-//            PWMout1 = map(PWMout1, -255, 255, -500, 500);
-//            K1.s(-(constrain((PWMout1*2),-500,500)));
-//            K1.s(-PWMout1);  
+            ST[0].motor(1,(constrain((PWMout1/2),-127,127)));    
         }
-
+    }
+    else
+    {
+        // Brake Motor 
+        PWMout1=PWMoffset1;
+        ST[0].motor(1,0);    
+    }
 }
 
 
-//void SetOutputsMotor2()       // MODE3
-//{
-//    if((Feedback2 > InputClipMax2) && (PWMrev2 != 0))
-//    {
-//        PWMout2 = PWMrev2;
-//        ST[0].motor(2,(constrain((PWMout2/2),-127,127)));    
-//    }
-//    else if((Feedback2<InputClipMin2) && (PWMrev2 != 0))
-//    {
-//        PWMout2 = PWMrev2;
-//        ST[0].motor(2,(constrain(0-(PWMout2/2),-127,127)));    
-//    }  
-//    else if(Target2 > (Feedback2 + DeadZone2) || Target2 < (Feedback2 - DeadZone2))
-//    {
-//        if (PWMout2 >= 0)  
-//        {                                    
-//            // Drive Motor Forward 
-//            PWMout2+=PWMoffset2;
-//            if(PWMout2 > PWMmax2+LiftFactor2){PWMout2=PWMmax2+LiftFactor2;}
-//            ST[0].motor(2,(constrain(0-(PWMout2/2),-127,127)));    
-//        }  
-//        else 
-//        {                                              
-//            // Drive Motor Backwards
-//            PWMout2 = abs(PWMout2);
-//            PWMout2+=PWMoffset2;
-//            if(PWMout2 > PWMmax2){PWMout2=PWMmax2;}
-//            ST[0].motor(2,(constrain((PWMout2/2),-127,127)));    
-//        }
-//    }
-//    else
-//    {
-//        // Brake Motor 
-//        PWMout2=PWMoffset2;
-//        ST[0].motor(2,0);    
-//    }
-//}
+void SetOutputsMotor2()       // MODE3
+{
+    if((Feedback2 > InputClipMax2) && (PWMrev2 != 0))
+    {
+        PWMout2 = PWMrev2;
+        ST[0].motor(2,(constrain((PWMout2/2),-127,127)));    
+    }
+    else if((Feedback2<InputClipMin2) && (PWMrev2 != 0))
+    {
+        PWMout2 = PWMrev2;
+        ST[0].motor(2,(constrain(0-(PWMout2/2),-127,127)));    
+    }  
+    else if(Target2 > (Feedback2 + DeadZone2) || Target2 < (Feedback2 - DeadZone2))
+    {
+        if (PWMout2 >= 0)  
+        {                                    
+            // Drive Motor Forward 
+            PWMout2+=PWMoffset2;
+            if(PWMout2 > PWMmax2+LiftFactor2){PWMout2=PWMmax2+LiftFactor2;}
+            ST[0].motor(2,(constrain(0-(PWMout2/2),-127,127)));    
+        }  
+        else 
+        {                                              
+            // Drive Motor Backwards
+            PWMout2 = abs(PWMout2);
+            PWMout2+=PWMoffset2;
+            if(PWMout2 > PWMmax2){PWMout2=PWMmax2;}
+            ST[0].motor(2,(constrain((PWMout2/2),-127,127)));    
+        }
+    }
+    else
+    {
+        // Brake Motor 
+        PWMout2=PWMoffset2;
+        ST[0].motor(2,0);    
+    }
+}
 
 
 void SetOutputsMotor3()       // MODE3
@@ -1928,130 +1888,20 @@ void loop()
 
         if (PIDProcessCounter >= PIDProcessDivider)
         {
-
-//          //***********************
-//            PIDProcessCounter=0;
-//            limitUpState1 = digitalRead(limitUp1);
-//            limitDownState1 = digitalRead(limitDown1);
-//            // Check and Update Motor 1 drive
-//            Serial.println(limitUpState1);
-//            Feedback1 = analogRead(FeedbackPin1);
-////            Feedback1 = map(encoderCounter1, -25000, 25000, 0, 1023);
-//           
-////            Serial.println(Feedback1);
-//            //************this line not been uploaded on Arduino. Need adjust when reload********
-//            if(Feedback1 < 340 || Feedback1 > 720 ){
-//              digitalWrite(ledPin, HIGH);
-////              ST[0].motor(1,0);
-////              ST[0].motor(2,0);
-////            }else if (Feedback1 - PreFeedback1 > 100){
-//////              Serial.print(Feedback1);
-//////              Serial.print("--");
-//////              Serial.println(Feedback1 - PreFeedback1);
-////              digitalWrite(ledPin, HIGH);
-////              ST[0].motor(1,0);
-////              ST[0].motor(1,0);
-//              
-//            }else{ 
-//              if ((Feedback1 > CutoffLimitMax1) || (Feedback1 < CutoffLimitMin1)) { DisableMotor1(); } 
-//              PWMout1=CalcMotor1PID(Target1,Feedback1);
-//              if (Disable1==0) 
-//              { 
-//                  
-////                  ST[0].setTimeout(500);
-//                  if (limitUpState1 == HIGH) {
-//                    
-////                      Serial.println(currentMillis - previousMillis);
-//                      if(currentMillis - previousMillis > 300){
-//                        digitalWrite(ledPin, HIGH);
-////                        ST[0].motor(1,0);
-////                        ST[0].motor(2,0);
-//                      }else{
-////                        ST[0].motor(1,-35);
-//                      }
-//                   
-//                  }else if(limitDownState1 == HIGH){
-//                      if(currentMillis - previousMillis > 300){
-//                        digitalWrite(ledPin, HIGH);
-////                        ST[0].motor(1,0);
-////                        ST[0].motor(2,0);
-//                      }else{
-////                        ST[0].motor(1,50);
-//                      }
-//                  } else {
-//                      digitalWrite(ledPin, LOW);
-////                      SetOutputsMotor1();
-//                      previousMillis = currentMillis;
-//                  }
-//                 
-//              }
-//              else
-//              {
-//                  PWMout1=0;
-//              }
-//              
-//           }
-            
- //*********************
-  PIDProcessCounter=0;
-              
-              
-              Feedback1 = analogRead(FeedbackPin1);
-              
-              Target = analogRead(targetPot);
-//              Serial.print("targetPot.................: ");
-//              Serial.print(Target);
-              limitUpState1 = digitalRead(limitUp1);
-              limitDownState1 = digitalRead(limitDown1);
-//              if (calibrated == false){
-//              Feedback1 = K1.getP().value();
-//            
-//              digitalWrite(ledPin, HIGH);
-//              while (limitUpState1 == LOW)
-//              {
-//                    K1.s(100);
-//                    Feedback1 = K1.getP().value();
-//                    Serial.print("do up..");
-//                    Serial.println(Feedback1);
-//                    
-//                    limitUpState1 = digitalRead(limitUp1);
-//             };
-//
-//              while (limitDownState1 == LOW)
-//              {
-//                  K1.s(-100);
-//                  Feedback1 = K1.getP().value();
-//                  Serial.print("do down..");
-//                  Serial.println(Feedback1);
-//                 
-//                  limitDownState1 = digitalRead(limitDown1);
-//             };
-//
-//             K1.home();
-//             while(Feedback1<300){
-//                  Feedback1 = K1.getP().value();
-//                  Serial.print("centering..");
-//                  Serial.println(Feedback1);
-//                  K1.s(100);
-//                }
-//           
-//
-//             
-//            }
-
-
-//               calibrated = true;
-//             digitalWrite(ledPin, LOW);
-             Feedback1 = K1.getP().value();
-//             Serial.print("Ready..");
-//             Serial.println(Feedback1);
-
-              
-            
-
-            if(Feedback1 < -10 || Feedback1 > 700 ){
+            PIDProcessCounter=0;
+            limitUpState1 = digitalRead(limitUp1);
+            limitDownState1 = digitalRead(limitDown1);
+            // Check and Update Motor 1 drive
+            Serial.println(limitUpState1);
+            Feedback1 = analogRead(FeedbackPin1);
+//            Feedback1 = map(encoderCounter1, -25000, 25000, 0, 1023);
+           
+//            Serial.println(Feedback1);
+            //************this line not been uploaded on Arduino. Need adjust when reload********
+            if(Feedback1 < 340 || Feedback1 > 720 ){
               digitalWrite(ledPin, HIGH);
-//              K1.s(0);
+              ST[0].motor(1,0);
+              ST[0].motor(2,0);
 //            }else if (Feedback1 - PreFeedback1 > 100){
 ////              Serial.print(Feedback1);
 ////              Serial.print("--");
@@ -2061,58 +1911,119 @@ void loop()
 //              ST[0].motor(1,0);
               
             }else{ 
-             
-
-//              ST[0].setTimeout(500);
-              if (limitUpState1 == HIGH) {
-                
-//                  if(currentMillis - previousMillis > 300){
-//                    digitalWrite(ledPin, HIGH);
-//                    K1.s(0);
-//                  }else{
-                    K1.s(-100);
-//                  }
-               
-              }else if(limitDownState1 == HIGH){
-//                  if(currentMillis - previousMillis > 300){
-//                    digitalWrite(ledPin, HIGH);
-//                    K1.s(0);
-//                  }else{
-                    K1.s(100);
-//                  }
-              } else {
-                  digitalWrite(ledPin, LOW);
-//                  Feedback1 = K1.getP().value();
-                  Target = analogRead(targetPot);
-//                  Serial.print("targetPot.................: ");
-//                  Serial.print(Target);
+              if ((Feedback1 > CutoffLimitMax1) || (Feedback1 < CutoffLimitMin1)) { DisableMotor1(); } 
+              PWMout1=CalcMotor1PID(Target1,Feedback1);
+              if (Disable1==0) 
+              { 
+                  
+                  ST[0].setTimeout(500);
+                  if (limitUpState1 == HIGH) {
                     
-                  PWMout1=CalcMotor1PID(Target,Feedback1);
-//                  Serial.print("PWM.................: ");
-//                  Serial.print(PWMout1);
-//                  SetOutputsMotor1();
-//                  Feedback1 = map(encoderCounter1, -25000, 25000, 0, 1023);
+//                      Serial.println(currentMillis - previousMillis);
+                      if(currentMillis - previousMillis > 300){
+                        digitalWrite(ledPin, HIGH);
+                        ST[0].motor(1,0);
+                        ST[0].motor(2,0);
+                      }else{
+                        ST[0].motor(1,-35);
+                      }
+                   
+                  }else if(limitDownState1 == HIGH){
+                      if(currentMillis - previousMillis > 300){
+                        digitalWrite(ledPin, HIGH);
+                        ST[0].motor(1,0);
+                        ST[0].motor(2,0);
+                      }else{
+                        ST[0].motor(1,50);
+                      }
+                  } else {
+                      digitalWrite(ledPin, LOW);
+                      SetOutputsMotor1();
+                      previousMillis = currentMillis;
+                  }
+                 
+              }
+              else
+              {
+                  PWMout1=0;
+              }
               
-//                  deltaPos = abs(Feedback1 - Target);
-////                  accumDeltaPos += deltaPos;
-//                  if(deltaPos > 50){
-//                    motorOut1 = 250;
-//                  }else{
-//                    motorOut1 = map(deltaPos, 0, 50,0, 250);
-//                  }
-//                  
-//                  if(Feedback1 - Target > 0){
-//                    motorOut1 = -motorOut1;
-//                  }    
-//                  K1.s(motorOut1);
-                  previousMillis = currentMillis;
-//              }
+           }
+            
+            // Check and Update Motor 2 drive
+            limitUpState2 = digitalRead(limitUp2);
+            limitDownState2 = digitalRead(limitDown2);
+            Feedback2 = analogRead(FeedbackPin2);
+
+            //************this line not been uploaded on Arduino. Need adjust when reload********
+            if(Feedback2 < 340 || Feedback2 > 720){
+              digitalWrite(ledPin, HIGH);
+              ST[0].motor(2,0);
+              ST[0].motor(1,0);
+//            }else if (Feedback2 - PreFeedback2 > 100){
+////              Serial.print(Feedback2);
+////              Serial.print("--");
+////              Serial.println(Feedback2 - PreFeedback2);
+//              digitalWrite(ledPin, HIGH);
+//              ST[0].motor(2,0);
+//              ST[0].motor(1,0);
+              
+            }else{ 
+//              
+              if ((Feedback2 > CutoffLimitMax2) || (Feedback2 < CutoffLimitMin2)) { DisableMotor2(); } 
+                PWMout2=CalcMotor2PID(Target2,Feedback2);
+              if (Disable2==0) 
+                { 
+                  
+                  ST[0].setTimeout(500);
+                  if (limitUpState2 == HIGH) {
+                    
+//                      Serial.println(currentMillis2 - previousMillis2);
+                      if(currentMillis2 - previousMillis2 > 300){
+                        digitalWrite(ledPin, HIGH);
+                        ST[0].motor(2,0);
+                        ST[0].motor(1,0);
+                      }else{
+                        ST[0].motor(2,-35);
+                      }
+                   
+                  }else if(limitDownState2 == HIGH){
+                      if(currentMillis2 - previousMillis2 > 300){
+                        digitalWrite(ledPin, HIGH);
+                        ST[0].motor(2,0);
+                        ST[0].motor(1,0);
+                      }else{
+                        ST[0].motor(2,50);
+                      }
+                  } else {
+                      digitalWrite(ledPin, LOW);
+                      SetOutputsMotor2();
+                      previousMillis2 = currentMillis2;
+                  }
+                 
+              }
+              else
+              {
+                  PWMout2=0;
+              }
+              
+           }
+
+            // Check and Update Motor 3 drive
+
+            Feedback3 = analogRead(FeedbackPin3);
+            if ((Feedback3 > CutoffLimitMax3) || (Feedback3 < CutoffLimitMin3)) { DisableMotor3(); } 
+            PWMout3=CalcMotor3PID(Target3,Feedback3);
+            if (Disable3==0) 
+            { 
+                SetOutputsMotor3(); 
             }
-          }   
+            else
+            {
+                PWMout3=0;
+            }
 
- //*************************
-
-           
+            LoopCount++;
         }
 
   while(softstart < 255)
