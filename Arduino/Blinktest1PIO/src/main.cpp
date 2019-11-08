@@ -6,6 +6,13 @@
 #define COM1 1         // Software Serial Port
 #define START_BYTE '[' // Start Byte for serial commands
 #define END_BYTE ']'
+#define PROCESS_PERIOD_uS 1000
+
+long startTime ;                    // start time for stop watch
+long elapsedTime ;
+
+     
+unsigned int CommsTimeout = 0; 
 
 unsigned int RxByte[2] = {0};      // Current byte received from each of the two comm ports
 int BufferEnd[2] = {-1};           // Rx Buffer end index for each of the two comm ports
@@ -15,14 +22,17 @@ String inputString = ""; // a String to hold incoming data
 
 int DeadZone1 = 65; //Starup Value
 int DeadZone2 = 66;
+unsigned long TimesUp;
 
 void setup()
 {
   // initialize serial:
-  Serial.begin(9600);
+  Serial.begin(500000);
   // reserve 200 bytes for the inputString:
   inputString.reserve(200);
   pinMode(LED_BUILTIN, OUTPUT);
+  
+  TimesUp = micros();
 }
 
 void SendTwoValues(int id, int v1, int v2, int ComPort)
@@ -77,10 +87,10 @@ void ReadEEProm()
 void ParseCommand(int ComPort)
 {
   // print the string when a newline arrives:
-
+  CommsTimeout = 0; 
   switch (RxBuffer[0][ComPort])
   { 
-    case 'A':
+    case 'D':
       DeadZone1 = RxBuffer[1][ComPort];
       DeadZone2 = RxBuffer[2][ComPort];
       break;
@@ -98,7 +108,6 @@ void ParseCommand(int ComPort)
     case 's':
       if(RxBuffer[1][ComPort]=='a' && RxBuffer[2][ComPort]=='v'){
         WriteEEProm();
-//        SendTwoValues('X', 'x', 'x', ComPort);
         break;
       }
 
@@ -106,32 +115,6 @@ void ParseCommand(int ComPort)
 
 
   }
-  // if (stringComplete)
-  // {
-  //   if (inputString.indexOf("START") != -1)
-  //   {
-  //     digitalWrite(LED_BUILTIN, led13);
-  //     Serial.println(led13);
-  //   }
-
-  //   if (inputString.indexOf("led13on") != -1)
-  //   {
-  //     digitalWrite(LED_BUILTIN, HIGH);
-
-  //     led13 = 1;
-  //     EEPROM.write(1, led13);
-  //     Serial.println(led13);
-  //   }
-
-  //   if (inputString.indexOf("led13of") != -1)
-  //   {
-  //     digitalWrite(LED_BUILTIN, LOW);
-  //     led13 = 0;
-  //     EEPROM.write(1, led13);
-  //     Serial.println(led13);
-  //   }
-  //   // clear the string:
-  // }
 }
 
 void CheckSerial0()
@@ -177,9 +160,21 @@ void CheckSerial0()
 
 void loop()
 {
-  ReadEEProm();
-  // digitalWrite(LED_BUILTIN, led13);
- 
-  CheckSerial0();
-  delay(100);
+  while(1==1){
+    ReadEEProm();
+    while ((micros() - TimesUp) < PROCESS_PERIOD_uS) { ; }
+          TimesUp += PROCESS_PERIOD_uS;
+    CheckSerial0();
+    // delay(100);
+    CommsTimeout++;
+          if (CommsTimeout >= 60000)       // 15 second timeout ie 60000 * PROCESS_PERIOD_uS
+          {
+              CommsTimeout = 60000;        // So the counter doesn't overflow
+          }
+
+    //  elapsedTime =   micros() - startTime;   
+    //   startTime = micros();
+    //   Serial.println(elapsedTime);
+      
+  }
 }

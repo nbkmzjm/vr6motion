@@ -55,8 +55,6 @@ namespace vr6Motion
 
         private void connectPort_Click(object sender, RoutedEventArgs e)
         {
-           
-
         }
         private delegate void UpdateUiTextDelegate(string text);
 
@@ -65,12 +63,11 @@ namespace vr6Motion
             Thread.Sleep(500);
             SerialPort sp = (SerialPort)sender;
             string data = sp.ReadTo("]");
-
-
-
             Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(SerialDataProcess), data);
-
         }
+
+        int deadZone1 = 0;
+        int deadZone2 = 0;
         
         private void SerialDataProcess(String data)
         {
@@ -83,9 +80,11 @@ namespace vr6Motion
                 switch (char.ToString((char)bytes[1]))
                 {
                     case "D":
-                        DeadZoneValue1.Text = bytes[2].ToString();
-                        Debug.WriteLine(bytes[2].ToString());
-                        DeadZoneValue2.Text = bytes[3].ToString();
+                        deadZone1 = (int)bytes[2];
+                        DeadZoneValue1.Text = deadZone1.ToString();
+                        deadZone2 = (int)bytes[3];
+                        DeadZoneValue2.Text = deadZone2.ToString();
+                        
                         break;
                 }
 
@@ -103,7 +102,7 @@ namespace vr6Motion
                 enabledControls(true);
                 //string selectedPort = comboxSelectPort.SelectedItem.ToString();
                 
-                port = new SerialPort("COM14", 9600, Parity.None, 8, StopBits.One);
+                port = new SerialPort("COM7", 500000, Parity.None, 8, StopBits.One);
                 port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
                 port.Open();
                 port.Write("START\n");
@@ -160,7 +159,10 @@ namespace vr6Motion
             //char x= (char)dz;
             //DeadZoneValue.Text = DeadZoneValue.Text + 1;
             //String sendData = "[" + char.ToString(x) + char.ToString(x) + char.ToString(x) + "]";
-            sendDataNum("A", 78, 79);
+            
+            
+            int updDeadZone1 = deadZone1 + 1;
+            sendDataNum("D", updDeadZone1, deadZone2);
             port.Write("[sav]");
             port.Write("[rdD]");
         }
@@ -178,8 +180,11 @@ namespace vr6Motion
 
         private void DeadZone1N_Click(object sender, RoutedEventArgs e)
         {
-            port.Write("led13of\n");
-            
+            int updDeadZone1 = deadZone1 - 1;
+            sendDataNum("D", updDeadZone1, deadZone2);
+            port.Write("[sav]");
+            port.Write("[rdD]");
+
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)

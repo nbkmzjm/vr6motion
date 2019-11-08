@@ -6,6 +6,8 @@
 //****************************************************************************************************************
     //SET SOFTSTART SPEED 
  const int SSloop = 30;
+ long startTime ;                    // start time for stop watch
+long elapsedTime ;
 //****************************************************************************************************************
 
 // Set to MODE1 for use with a typical H-Bride that requires PWM and 1 or 2 direction inputs
@@ -2043,6 +2045,9 @@ void loop()
         // Check if there is any received serial data and process (Hardware UART)
 
         CheckSerial0();
+        elapsedTime =   micros() - startTime;   
+      startTime = micros();
+      Serial.println(elapsedTime);
 
         // Check if there is any received serial data and process (Software Serial)
 
