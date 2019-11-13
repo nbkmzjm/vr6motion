@@ -27,7 +27,7 @@ unsigned long TimesUp;
 void setup()
 {
   // initialize serial:
-  Serial.begin(500000);
+  Serial.begin(19200);
   // reserve 200 bytes for the inputString:
   inputString.reserve(200);
   pinMode(LED_BUILTIN, OUTPUT);

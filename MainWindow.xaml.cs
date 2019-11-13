@@ -102,10 +102,10 @@ namespace vr6Motion
                 enabledControls(true);
                 //string selectedPort = comboxSelectPort.SelectedItem.ToString();
                 
-                port = new SerialPort("COM14", 19200, Parity.None, 8, StopBits.One);
+                port = new SerialPort("COM7", 19200, Parity.None, 8, StopBits.One);
                 port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
                 port.Open();
-                port.Write("START\n");
+                //port.Write("START\n");
                 connectPortBtn.Content = "Disconnect";
                 comboxSelectPort.IsEnabled = false;
             }
@@ -201,7 +201,17 @@ namespace vr6Motion
         {
             if (connectPortBtn.Content == "Disconnect")
             {
-                port.Write("[rdD]");
+                port.Write("[rda]");
+                port.Write("[rdb]");
+                port.Write("[rdc]");
+                
+                for (int txVal = 65; txVal < 91; txVal ++)
+                {
+                    char txValChar = (char)txVal;
+                    string txValString = char.ToString(txValChar);
+                    port.Write("[rd" + txValString + "]");
+                    Debug.Write("[rd" + txValString + "]");
+                }
             }
         }
 
