@@ -102,7 +102,7 @@ namespace vr6Motion
                 enabledControls(true);
                 //string selectedPort = comboxSelectPort.SelectedItem.ToString();
                 
-                port = new SerialPort("COM7", 19200, Parity.None, 8, StopBits.One);
+                port = new SerialPort("COM14", 19200, Parity.None, 8, StopBits.One);
                 port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
                 port.Open();
                 //port.Write("START\n");
@@ -201,17 +201,17 @@ namespace vr6Motion
         {
             if (connectPortBtn.Content == "Disconnect")
             {
-                port.Write("[rda]");
-                port.Write("[rdb]");
-                port.Write("[rdc]");
+                port.Write("[rdD]");
+                //port.Write("[rdb]");
+                //port.Write("[rdc]");
                 
-                for (int txVal = 65; txVal < 91; txVal ++)
-                {
-                    char txValChar = (char)txVal;
-                    string txValString = char.ToString(txValChar);
-                    port.Write("[rd" + txValString + "]");
-                    Debug.Write("[rd" + txValString + "]");
-                }
+                //for (int txVal = 65; txVal < 91; txVal ++)
+                //{
+                //    char txValChar = (char)txVal;
+                //    string txValString = char.ToString(txValChar);
+                //    port.Write("[rd" + txValString + "]");
+                //    Debug.Write("[rd" + txValString + "]");
+                //}
             }
         }
 
@@ -223,6 +223,17 @@ namespace vr6Motion
         private void DeadZone2P_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void selectOption_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string val = comboxMotor.SelectedValue.ToString();
+            Debug.Write(val);
+            if(val == "1")
+            {
+                port.Write("[rdA]");
+
+            }
         }
     }
 }
