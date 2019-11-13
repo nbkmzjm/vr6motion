@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "C:\\Arduino\\hardware\\arduino\\avr\\libraries\\SoftwareSerial\\src",
+                "C:\\Arduino\\hardware\\arduino\\avr\\libraries\\EEPROM\\src",
+                "C:\\Users\\ngokh\\OneDrive\\Documents\\Arduino\\libraries\\Kangaroo_Motion_Controller",
+                "C:\\Arduino\\tools\\**",
+                "C:\\Arduino\\hardware\\arduino\\avr\\**"
+            ],
+            "forcedInclude": [
+                "C:\\Arduino\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h"
+            ],
+            "intelliSenseMode": "msvc-x64"
+        }
+    ],
+    "version": 4
+}
