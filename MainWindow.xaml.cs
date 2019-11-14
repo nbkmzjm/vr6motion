@@ -68,7 +68,9 @@ namespace vr6Motion
 
         int deadZone = 0;
         int PWMrev = 0;
-        
+        int stepValue;
+        int Kp = 0;
+
         private void SerialDataProcess(String data)
         {
             Debug.WriteLine(data);
@@ -81,13 +83,18 @@ namespace vr6Motion
                 {
                     case "V":
                         deadZone = (int)bytes[2];
-                        Debug.Write(deadZone);
-
                         DeadZoneValue.Content = deadZone.ToString();
+                        Debug.Write((int)bytes[2]);
+                        Debug.Write((int)bytes[3]);
                         PWMrev = (int)bytes[3];
-                        Debug.Write(PWMrev);
+                        
                         PWMrevValue.Content = PWMrev.ToString();
                         break;
+                    case "D":
+                        Kp = (int)bytes[2] * 256 + (int)bytes[3];
+                        KpValue.Content = Kp.ToString();
+                        break;
+
                 }
 
             }
@@ -104,7 +111,7 @@ namespace vr6Motion
                 enabledControls(true);
                 //string selectedPort = comboxSelectPort.SelectedItem.ToString();
                 
-                port = new SerialPort("COM7", 19200, Parity.None, 8, StopBits.One);
+                port = new SerialPort("COM14", 19200, Parity.None, 8, StopBits.One);
                 port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
                 port.Open();
                 //port.Write("START\n");
@@ -164,13 +171,13 @@ namespace vr6Motion
 
 
             stepValue = Int32.Parse(StepValue.Content.ToString());
-            int updDeadZone = deadZone + stepValue;
-            sendDataNum("V", updDeadZone, PWMrev);
+            int updValue = deadZone + stepValue;
+            sendTwoVal("V", updValue, PWMrev);
             port.Write("[sav]");
             port.Write("[rdV]");
         }
 
-        private void sendDataNum(string header, int val1, int val2)
+        private void sendTwoVal(string header, int val1, int val2)
         {
             String sendData;
             char valOne = (char)val1;
@@ -180,17 +187,29 @@ namespace vr6Motion
             port.Write(sendData);
         }
 
-        int stepValue;
+
+        private void sendOneVal(string header, int val)
+        {
+            String sendData;
+            int high= val/256;
+            int low = val - (256 * high);
+            
+
+            
+            sendData = "[" + header + char.ToString((char)high) + char.ToString((char)low) + "]";
+        }
+
+        
         private void DeadZoneN_Click(object sender, RoutedEventArgs e)
         {
 
-            
-            
-            
+
+
+
             stepValue = Int32.Parse(StepValue.Content.ToString());
-            int updDeadZone = deadZone - stepValue;
-            if (updDeadZone < 0) { updDeadZone = 0; }
-            sendDataNum("V", updDeadZone, PWMrev);
+            int updValue = deadZone - stepValue;
+            if (updValue < 0) { updValue = 0; }
+            sendTwoVal("V", updValue, PWMrev);
             port.Write("[sav]");
             port.Write("[rdV]");
 
@@ -241,7 +260,7 @@ namespace vr6Motion
             if(val == "1")
             {
                 //port.Write("[rdA]");
-                //port.Write("[rdD]");
+                port.Write("[rdD]");
                 //port.Write("[rdJ]");
                 //port.Write("[rdM]");
                 //port.Write("[rdP]");
@@ -264,15 +283,23 @@ namespace vr6Motion
         private void PWMrevP_Click(object sender, RoutedEventArgs e)
         {
             stepValue = Int32.Parse(StepValue.Content.ToString());
-            int updDeadZone = deadZone + stepValue;
-            sendDataNum("V", updDeadZone, PWMrev);
+            int updValue = PWMrev + stepValue;
+            sendTwoVal("V", deadZone, updValue);
             port.Write("[sav]");
             port.Write("[rdV]");
         }
 
+
+     
+
         private void PWMrevN_Click(object sender, RoutedEventArgs e)
         {
-
+            stepValue = Int32.Parse(StepValue.Content.ToString());
+            int updValue = PWMrev - stepValue;
+            if (updValue < 0) { updValue = 0; }
+            sendTwoVal("V", deadZone, updValue);
+            port.Write("[sav]");
+            port.Write("[rdV]");
         }
 
         private void StepP_Click(object sender, RoutedEventArgs e)
@@ -295,6 +322,16 @@ namespace vr6Motion
             stepValue = Int32.Parse(StepValue.Content.ToString()) - 5;
             if (stepValue < 0) { stepValue = 1; }
             StepValue.Content = stepValue.ToString();
+        }
+
+        private void KpP_Click(object sender, RoutedEventArgs e)
+        {
+            stepValue = Int32.Parse(StepValue.Content.ToString());
+            int updValue = Kp + stepValue;
+            sendOneVal("D", updValue);
+            port.Write("[sav]");
+            port.Write("[rdD]");
+
         }
     }
 }

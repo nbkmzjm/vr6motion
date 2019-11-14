@@ -33,7 +33,7 @@
         </ComboBox>
 
         <Label x:Name="MotorLabel" Content="Motor" HorizontalAlignment="Left" Margin="50,59,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="MaxLimitLabel" Content="ClipInput=" HorizontalAlignment="Left" Margin="227,294,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
+        <Label x:Name="MaxLimitLabel" Content="MaxLimit=" HorizontalAlignment="Left" Margin="227,294,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
         <Button x:Name="MaxLimitP" Content="+" HorizontalAlignment="Left" Margin="369,297,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="MaxLimitP_Click"/>
         <Button x:Name="MaxLimitN" Content="-" HorizontalAlignment="Left" Margin="346,297,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="MaxLimitN_Click"/>
         <Label x:Name="DeadZoneValue" Content="0" HorizontalAlignment="Left" Margin="306,242,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="29"/>
@@ -59,7 +59,7 @@
         <Button x:Name="FpidN" Content="-" HorizontalAlignment="Left" Margin="127,189,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
         <Label x:Name="FpidLabel" Content="Fpid/" HorizontalAlignment="Left" Margin="61,186,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
         <Label x:Name="FpidValue" Content="1" HorizontalAlignment="Left" Margin="87,186,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="30"/>
-        <Button x:Name="KpP" Content="+" HorizontalAlignment="Left" Margin="151,215,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
+        <Button x:Name="KpP" Content="+" HorizontalAlignment="Left" Margin="151,215,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KpP_Click" />
         <Button x:Name="KpN" Content="-" HorizontalAlignment="Left" Margin="127,215,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
         <Label x:Name="KpLabel" Content="Kp=" HorizontalAlignment="Left" Margin="50,212,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
         <Label x:Name="KpValue" Content="20" HorizontalAlignment="Left" Margin="87,212,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="30"/>
