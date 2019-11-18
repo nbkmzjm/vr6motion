@@ -928,6 +928,9 @@ void ParseCommand(int ComPort)
                         break;
                     case 'V':
                         SendTwoValues('V',DeadZone1,PWMrev1,ComPort);
+                        Serial.write("[*oko*]");
+                        SendValue('D',Kp1_x100,ComPort);
+                        
                         break;
                     case 'W':
                         SendTwoValues('W',DeadZone2,PWMrev2,ComPort);
@@ -953,6 +956,7 @@ void ParseCommand(int ComPort)
             break;
         case 'D':
             Kp1_x100=(RxBuffer[1][ComPort]*256)+RxBuffer[2][ComPort];
+            
             break;
         case 'E':
             Kp2_x100=(RxBuffer[1][ComPort]*256)+RxBuffer[2][ComPort];

@@ -62,8 +62,64 @@ namespace vr6Motion
         {
             Thread.Sleep(500);
             SerialPort sp = (SerialPort)sender;
-            string data = sp.ReadTo("]");
-            Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(SerialDataProcess), data);
+            int i = sp.BytesToRead;
+            Debug.WriteLine(i);
+            Debug.WriteLine("---");
+            int bufferEnd = -1;
+            char rxByte;
+
+            char [] rxBuffer = new char[4];
+            while (i > 0)
+
+            {
+                //byte[] data = new byte[i];
+                //sp.Read(data, 0, i);
+                for (int x = 0; x<i ; x++)
+                {
+                    //Debug.WriteLine((byte)sp.ReadByte());
+                    
+                    if(bufferEnd == -1)
+                    {
+                        rxByte = (char)sp.ReadByte();
+                        if (rxByte.ToString() != "[")
+                        {
+                            bufferEnd = -1;
+                        }
+                        else
+                        {
+                            bufferEnd = 0;
+                        }
+                    }
+                    else
+                    {
+                        rxByte = (char)sp.ReadByte();
+                        rxBuffer[bufferEnd] = rxByte;
+                        bufferEnd++;
+                        if(bufferEnd > 3)
+                        {
+                            if (rxBuffer[3].ToString() == "]")
+                            {
+                                Debug.WriteLine("0-"+rxBuffer[0]);
+                                Debug.WriteLine("1-"+rxBuffer[1]);
+                                Debug.WriteLine("2-"+rxBuffer[2]);
+                                Debug.WriteLine("3-"+rxBuffer[3]);
+                                
+                                Debug.WriteLine("==============");
+                            }
+                            bufferEnd = -1;
+                        }
+                    }
+                    
+                }
+                
+                
+                //Debug.WriteLine(data[1]);
+                //Debug.WriteLine(data[2]);
+                //Debug.WriteLine(data[3]);
+            }
+           
+            //string data = sp.ReadTo("]");
+            //Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(SerialDataProcess), data);
         }
 
         int deadZone = 0;
@@ -188,15 +244,16 @@ namespace vr6Motion
         }
 
 
-        private void sendOneVal(string header, int val)
+        private void sendOneVal(string header, decimal val)
         {
             String sendData;
-            int high= val/256;
-            int low = val - (256 * high);
+            int high= (int)Math.Round(val/256, 0);
+            int low = (int)val - (256 * high);
             
 
             
             sendData = "[" + header + char.ToString((char)high) + char.ToString((char)low) + "]";
+            port.Write(sendData);
         }
 
         
@@ -229,10 +286,10 @@ namespace vr6Motion
         {
             if (connectPortBtn.Content == "Disconnect")
             {
-                //port.Write("[rdD]");
+                //port.Write("[rdV]");
                 //port.Write("[rdb]");
                 //port.Write("[rdc]");
-                
+
                 //for (int txVal = 65; txVal < 91; txVal ++)
                 //{
                 //    char txValChar = (char)txVal;
@@ -260,7 +317,7 @@ namespace vr6Motion
             if(val == "1")
             {
                 //port.Write("[rdA]");
-                port.Write("[rdD]");
+                //port.Write("[rdD]");
                 //port.Write("[rdJ]");
                 //port.Write("[rdM]");
                 //port.Write("[rdP]");
@@ -327,11 +384,20 @@ namespace vr6Motion
         private void KpP_Click(object sender, RoutedEventArgs e)
         {
             stepValue = Int32.Parse(StepValue.Content.ToString());
-            int updValue = Kp + stepValue;
-            sendOneVal("D", updValue);
+            int deltaVal = Kp + stepValue;
+            sendOneVal("D", deltaVal);
             port.Write("[sav]");
             port.Write("[rdD]");
 
+        }
+
+        private void KpN_Click(object sender, RoutedEventArgs e)
+        {
+            stepValue = Int32.Parse(StepValue.Content.ToString());
+            int deltaVal = Kp - stepValue;
+            sendOneVal("D", deltaVal);
+            port.Write("[sav]");
+            port.Write("[rdD]");
         }
     }
 }

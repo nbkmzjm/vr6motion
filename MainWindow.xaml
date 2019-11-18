@@ -55,30 +55,32 @@
         <Button x:Name="FpwmN" Content="-" HorizontalAlignment="Left" Margin="346,129,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
         <Label x:Name="FpwmLabel" Content="Fpwm" HorizontalAlignment="Left" Margin="227,126,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
         <Label x:Name="FpwmValue" Content="20" HorizontalAlignment="Left" Margin="306,126,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="29"/>
-        <Button x:Name="FpidP" Content="+" HorizontalAlignment="Left" Margin="151,189,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
-        <Button x:Name="FpidN" Content="-" HorizontalAlignment="Left" Margin="127,189,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
+        <Button x:Name="FpidP" Content="+" HorizontalAlignment="Left" Margin="161,188,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
+        <Button x:Name="FpidN" Content="-" HorizontalAlignment="Left" Margin="137,188,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
         <Label x:Name="FpidLabel" Content="Fpid/" HorizontalAlignment="Left" Margin="61,186,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
         <Label x:Name="FpidValue" Content="1" HorizontalAlignment="Left" Margin="87,186,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="30"/>
-        <Button x:Name="KpP" Content="+" HorizontalAlignment="Left" Margin="151,215,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KpP_Click" />
-        <Button x:Name="KpN" Content="-" HorizontalAlignment="Left" Margin="127,215,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
+        <Button x:Name="KpP" Content="+" HorizontalAlignment="Left" Margin="161,214,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KpP_Click" />
+        <Button x:Name="KpN" Content="-" HorizontalAlignment="Left" Margin="137,214,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KpN_Click" />
         <Label x:Name="KpLabel" Content="Kp=" HorizontalAlignment="Left" Margin="50,212,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
-        <Label x:Name="KpValue" Content="20" HorizontalAlignment="Left" Margin="87,212,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="30"/>
-        <Button x:Name="KiP" Content="+" HorizontalAlignment="Left" Margin="151,244,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
-        <Button x:Name="KiN" Content="-" HorizontalAlignment="Left" Margin="127,244,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
+        <Label x:Name="KpValue" Content="20" HorizontalAlignment="Left" Margin="87,212,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="45"/>
+        <Button x:Name="KiP" Content="+" HorizontalAlignment="Left" Margin="161,243,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
+        <Button x:Name="KiN" Content="-" HorizontalAlignment="Left" Margin="137,243,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
         <Label x:Name="KiLabel" Content="Ki=" HorizontalAlignment="Left" Margin="51,241,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
-        <Label x:Name="KiValue" Content="0" HorizontalAlignment="Left" Margin="87,241,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="30"/>
-        <Button x:Name="KdP" Content="+" HorizontalAlignment="Left" Margin="151,268,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
-        <Button x:Name="KdN" Content="-" HorizontalAlignment="Left" Margin="127,268,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
+        <Label x:Name="KiValue" Content="0" HorizontalAlignment="Left" Margin="87,241,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="45"/>
+        <Button x:Name="KdP" Content="+" HorizontalAlignment="Left" Margin="161,267,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
+        <Button x:Name="KdN" Content="-" HorizontalAlignment="Left" Margin="137,267,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
         <Label x:Name="KdLabel" Content="Ki=" HorizontalAlignment="Left" Margin="50,264,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
-        <Label x:Name="KdValue" Content="0" HorizontalAlignment="Left" Margin="87,264,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="30"/>
-        <Button x:Name="KsP" Content="+" HorizontalAlignment="Left" Margin="151,293,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
-        <Button x:Name="KsN" Content="-" HorizontalAlignment="Left" Margin="127,293,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
+        <Label x:Name="KdValue" Content="0" HorizontalAlignment="Left" Margin="87,264,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="45"/>
+        <Button x:Name="KsP" Content="+" HorizontalAlignment="Left" Margin="161,292,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
+        <Button x:Name="KsN" Content="-" HorizontalAlignment="Left" Margin="137,292,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
         <Label x:Name="KsLabel" Content="Ks=" HorizontalAlignment="Left" Margin="51,290,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
-        <Label x:Name="KsValue" Content="20" HorizontalAlignment="Left" Margin="87,290,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="30"/>
+        <Label x:Name="KsValue" Content="20" HorizontalAlignment="Left" Margin="87,290,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="45"/>
         <Button x:Name="StepP" Content="+" HorizontalAlignment="Left" Margin="160,149,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="26" Height="22" Click="StepP_Click" />
         <Button x:Name="StepN" Content="-" HorizontalAlignment="Left" Margin="94,149,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="28" Height="22" Click="StepN_Click" />
         <Label x:Name="StepLabel" Content="Step" HorizontalAlignment="Left" Margin="48,143,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" FontSize="16"/>
         <Label x:Name="StepValue" Content="1" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="122,142,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="33" FontSize="16"/>
+        <TextBox HorizontalAlignment="Left" Margin="23,47,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Column="1"/>
+        <Button Content="Button" Grid.Column="1" HorizontalAlignment="Center" Margin="0,46,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>
