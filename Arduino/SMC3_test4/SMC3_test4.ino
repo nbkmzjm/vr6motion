@@ -119,6 +119,7 @@ int PotInput = 512;
 int OffsetAdjust=0;
 
 unsigned int RxByte[2]={0};         // Current byte received from each of the two comm ports
+char charRxByte;
 int BufferEnd[2]={-1};              // Rx Buffer end index for each of the two comm ports
 unsigned int RxBuffer[5][2]={0};    // 5 byte Rx Command Buffer for each of the two comm ports
 unsigned long LoopCount = 0;        // unsigned 32bit, 0 to 4,294,967,295 to count times round loop
@@ -442,7 +443,7 @@ void setup()
   pinMode(12, INPUT_PULLUP);
   
   if (digitalRead(8) == HIGH){
-    Serial.begin(19200);   
+    Serial.begin(500000);   
   }
 else
 {
@@ -507,8 +508,8 @@ void WriteEEPRomWord(int address, int intvalue)
     int low,high;
     high=intvalue/256;
     low=intvalue-(256*high);
-    EEPROM.write(address,high);
-    EEPROM.write(address+1,low);
+    EEPROM.update(address,high);
+    EEPROM.update(address+1,low);
 }
 
 int ReadEEPRomWord(int address)
@@ -528,47 +529,47 @@ int ReadEEPRomWord(int address)
 
 void WriteEEProm()
 {
-    EEPROM.write(0,114);
-    EEPROM.write(1,CutoffLimitMin1);
-    EEPROM.write(2,InputClipMin1);
+    EEPROM.update(0,114);
+    EEPROM.update(1,CutoffLimitMin1);
+    EEPROM.update(2,InputClipMin1);
     
-    EEPROM.write(5,DeadZone1);
-    EEPROM.write(6,CutoffLimitMin2);
-    EEPROM.write(7,InputClipMin2);
+    EEPROM.update(5,DeadZone1);
+    EEPROM.update(6,CutoffLimitMin2);
+    EEPROM.update(7,InputClipMin2);
 
-    EEPROM.write(10,DeadZone2);
+    EEPROM.update(10,DeadZone2);
     WriteEEPRomWord(11,Kp1_x100);    // **** Even though these variables are long the actual values stored are only 0 to 1000 so OK ****
     WriteEEPRomWord(13,Ki1_x100);
     WriteEEPRomWord(15,Kd1_x100);
     WriteEEPRomWord(17,Kp2_x100);
     WriteEEPRomWord(19,Ki2_x100);
     WriteEEPRomWord(21,Kd2_x100);
-    EEPROM.write(23,PWMoffset1);
-    EEPROM.write(24,PWMoffset2);
-    EEPROM.write(25,PWMmax1);
-    EEPROM.write(26,PWMmax2);
-    EEPROM.write(27,PWMrev1);
-    EEPROM.write(28,PWMrev2);
-    EEPROM.write(29,PWMrev3);
+    EEPROM.update(23,PWMoffset1);
+    EEPROM.update(24,PWMoffset2);
+    EEPROM.update(25,PWMmax1);
+    EEPROM.update(26,PWMmax2);
+    EEPROM.update(27,PWMrev1);
+    EEPROM.update(28,PWMrev2);
+    EEPROM.update(29,PWMrev3);
 
 
-    EEPROM.write(31,CutoffLimitMin3);
-    EEPROM.write(32,InputClipMin3);
+    EEPROM.update(31,CutoffLimitMin3);
+    EEPROM.update(32,InputClipMin3);
 
-    EEPROM.write(35,DeadZone3);
+    EEPROM.update(35,DeadZone3);
     WriteEEPRomWord(36,Kp3_x100);
     WriteEEPRomWord(38,Ki3_x100);
     WriteEEPRomWord(40,Kd3_x100);
-    EEPROM.write(42,PWMoffset3);
-    EEPROM.write(43,PWMmax3);
+    EEPROM.update(42,PWMoffset3);
+    EEPROM.update(43,PWMmax3);
 
     WriteEEPRomWord(44,Ks1);
     WriteEEPRomWord(46,Ks2);
     WriteEEPRomWord(48,Ks3);
 
-    EEPROM.write(50,constrain(PIDProcessDivider,1,10));
-    EEPROM.write(51,Timer1FreqkHz);
-    EEPROM.write(52,Timer2FreqkHz);
+    EEPROM.update(50,constrain(PIDProcessDivider,1,10));
+    EEPROM.update(51,Timer1FreqkHz);
+    EEPROM.update(52,Timer2FreqkHz);
 }
 
 //****************************************************************************************************************
@@ -927,14 +928,17 @@ void ParseCommand(int ComPort)
                         SendTwoValues('U',CutoffLimitMin3,InputClipMin3,ComPort);
                         break;
                     case 'V':
-                        // SendTwoValues('V',DeadZone1,PWMrev1,ComPort);
+                        SendTwoValues('V',DeadZone1,PWMrev1,ComPort);
                         
-                        Serial.write(START_BYTE);
-                        Serial.write('V');
-                        Serial.write('A');
-                        Serial.write('B');
-                        Serial.write(END_BYTE);
-                        // Serial.write("{*[oko]*}");
+                        
+                        // Serial.write(START_BYTE);
+                        // Serial.write('V');
+                        // Serial.write('A');
+                        // Serial.write('B');
+                        // Serial.write(END_BYTE);
+                        // Serial.write("{ab");
+                        // Serial.write(DeadZone1);
+                        // Serial.write("df}");
                         // SendValue('D',Kp1_x100,ComPort);
                         
                         break;
@@ -962,6 +966,11 @@ void ParseCommand(int ComPort)
             break;
         case 'D':
             Kp1_x100=(RxBuffer[1][ComPort]*256)+RxBuffer[2][ComPort];
+            // Serial.write("{");
+            // Serial.write(RxBuffer[1][ComPort]);
+            // Serial.write("-");
+            // Serial.write(RxBuffer[2][ComPort]);
+            // Serial.write("}");
             
             break;
         case 'E':
@@ -1030,6 +1039,7 @@ void ParseCommand(int ComPort)
         case 'V':
             DeadZone1=RxBuffer[1][ComPort];
             PWMrev1=RxBuffer[2][ComPort];
+            
             break;
         case 'W':
             DeadZone2=RxBuffer[1][ComPort];
@@ -1163,6 +1173,8 @@ void CheckSerial0()
         else
         {
             RxByte[COM0] = Serial.read();
+            
+            
             RxBuffer[BufferEnd[COM0]][COM0]=RxByte[COM0];
             BufferEnd[COM0]++;
             if(BufferEnd[COM0] > 3)
@@ -1195,6 +1207,7 @@ void CheckSerial1()
         else
         {
             RxByte[COM1] = mySerial.read();
+
             RxBuffer[BufferEnd[COM1]][COM1]=RxByte[COM1];
             BufferEnd[COM1]++;
             if(BufferEnd[COM1] > 3)
