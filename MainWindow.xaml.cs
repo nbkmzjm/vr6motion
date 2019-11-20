@@ -27,6 +27,11 @@ namespace vr6Motion
         String[] ports;
         SerialPort port;
         bool isConnected = false;
+
+        int deadZone = 0;
+        int PWMrev = 0;
+        int stepValue;
+        int Kp = 0;
         public MainWindow()
         {
             InitializeComponent();
@@ -56,104 +61,135 @@ namespace vr6Motion
         private void connectPort_Click(object sender, RoutedEventArgs e)
         {
         }
-        private delegate void UpdateUiTextDelegate(string text);
+        private delegate void UpdateUiTextDelegate(int[] text);
 
         private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
-            Thread.Sleep(500);
+            //Thread.Sleep(500);
             SerialPort sp = (SerialPort)sender;
+            //string data = sp.ReadExisting();
+            
+
+            //Debug.Print("data:-----------");
+            //Debug.Print(data);
+            //Debug.WriteLine("data:-----------");
+
             int i = sp.BytesToRead;
             Debug.WriteLine(i);
             Debug.WriteLine("---");
             int bufferEnd = -1;
             char rxByte;
+            char[] rxBufDebug = new char[10];
 
             char [] rxBuffer = new char[4];
-            while (i > 0)
 
-            {
-                //byte[] data = new byte[i];
-                //sp.Read(data, 0, i);
-                for (int x = 0; x<i ; x++)
-                {
-                    //Debug.WriteLine((byte)sp.ReadByte());
-                    
-                    if(bufferEnd == -1)
-                    {
-                        rxByte = (char)sp.ReadByte();
-                        if (rxByte.ToString() != "[")
-                        {
-                            bufferEnd = -1;
-                        }
-                        else
-                        {
-                            bufferEnd = 0;
-                        }
-                    }
-                    else
-                    {
-                        rxByte = (char)sp.ReadByte();
-                        rxBuffer[bufferEnd] = rxByte;
-                        bufferEnd++;
-                        if(bufferEnd > 3)
-                        {
-                            if (rxBuffer[3].ToString() == "]")
-                            {
-                                Debug.WriteLine("0-"+rxBuffer[0]);
-                                Debug.WriteLine("1-"+rxBuffer[1]);
-                                Debug.WriteLine("2-"+rxBuffer[2]);
-                                Debug.WriteLine("3-"+rxBuffer[3]);
-                                
-                                Debug.WriteLine("==============");
-                            }
-                            bufferEnd = -1;
-                        }
-                    }
-                    
-                }
-                
-                
-                //Debug.WriteLine(data[1]);
-                //Debug.WriteLine(data[2]);
-                //Debug.WriteLine(data[3]);
-            }
-           
+            int[] data = new int[2];
+            data[0] = i;
+            data[1] = (char)sp.ReadByte();
+            //while (i > 0)
+
+            //{
+            //    //byte[] data = new byte[i];
+            //    //sp.Read(data, 0, i);
+            //    for (int x = 0; x<i ; x++)
+            //    {
+
+            rxByte = (char)sp.ReadByte();
+            //        //Debug out put from Arduino when find byte "{" and rxBuffer is not in processing
+            //        if (rxByte.ToString() == "{" && bufferEnd == -1)
+            //        {
+            //            int y = 0;
+            //            while (rxByte.ToString() != "}")
+            //            {
+            //                rxByte = (char)sp.ReadByte();
+            //                rxBufDebug[y] = rxByte;
+            //                y++;
+            //            }
+            //            string data = new string(rxBufDebug);
+            //            Debug.WriteLine(data);
+            //            Debug.WriteLine("*********");
+            //        }
+
+            //        if (bufferEnd == -1)
+            //        {
+            //            if (rxByte.ToString() != "[")
+            //            {
+            //                bufferEnd = -1;
+            //            }
+            //            else
+            //            {
+            //                bufferEnd = 0;
+            //            }
+            //        }
+            //        else
+            //        {
+            //            rxBuffer[bufferEnd] = rxByte;
+            //            bufferEnd++;
+            //            if (bufferEnd > 3)
+            //            {
+            //                if (rxBuffer[3].ToString() == "]")
+            //                {
+            //                    Debug.Write("0: ");
+            //                    Debug.WriteLine(rxBuffer[0]);
+            //                    deadZone = (int)rxBuffer[0];
+            //                    TextBoxX. .Text = deadZone.ToString();
+            //                    Debug.Write("1: ");
+            //                    Debug.WriteLine(rxBuffer[1]);
+            //                    Debug.Write("2: ");
+            //                    Debug.WriteLine(rxBuffer[2]);
+            //                    Debug.Write("3: ");
+            //                    Debug.WriteLine(rxBuffer[3]);
+
+            //                    Debug.WriteLine("==============");
+            //                }
+            //                bufferEnd = -1;
+            //            }
+            //        }
+
+            //    }
+
+
+            //    //Debug.WriteLine(data[1]);
+            //    //Debug.WriteLine(data[2]);
+            //    //Debug.WriteLine(data[3]);
+            //}
+
             //string data = sp.ReadTo("]");
-            //Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(SerialDataProcess), data);
+            Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(SerialDataProcess), data);
         }
 
-        int deadZone = 0;
-        int PWMrev = 0;
-        int stepValue;
-        int Kp = 0;
+        
 
-        private void SerialDataProcess(String data)
+        private void SerialDataProcess(int[] data)
         {
-            Debug.WriteLine(data);
+            Debug.WriteLine("data:");
+            Debug.WriteLine(data[0]);
+            Debug.WriteLine(data[1]);
+           
 
-            byte[] bytes = Encoding.ASCII.GetBytes(data);
-            //Debug.WriteLine(char.ToString((char)bytes[0]));
-            if (char.ToString((char)bytes[0]) == "[")
-            {
-                switch (char.ToString((char)bytes[1]))
-                {
-                    case "V":
-                        deadZone = (int)bytes[2];
-                        DeadZoneValue.Content = deadZone.ToString();
-                        Debug.Write((int)bytes[2]);
-                        Debug.Write((int)bytes[3]);
-                        PWMrev = (int)bytes[3];
-                        
-                        PWMrevValue.Content = PWMrev.ToString();
-                        break;
-                    case "D":
-                        Kp = (int)bytes[2] * 256 + (int)bytes[3];
-                        KpValue.Content = Kp.ToString();
-                        break;
+            //    byte[] bytes = Encoding.ASCII.GetBytes(data);
+            //    //Debug.WriteLine(char.ToString((char)bytes[0]));
+            //    if (char.ToString((char)bytes[0]) == "[")
+            //    {
+            //        switch (char.ToString((char)bytes[1]))
+            //        {
+            //            case "V":
+            //                deadZone = (int)bytes[2];
+            //                DeadZoneValue.Content = deadZone.ToString();
+            //                Debug.Write((int)bytes[2]);
+            //                Debug.Write((int)bytes[3]);
+            //                PWMrev = (int)bytes[3];
 
-                }
+            //                PWMrevValue.Content = PWMrev.ToString();
+            //                break;
+            //            case "D":
+            //                Kp = (int)bytes[2] * 256 + (int)bytes[3];
+            //                KpValue.Content = Kp.ToString();
+            //                break;
 
-            }
+            //        }
+
+            //    }
 
         }
 
@@ -167,7 +203,7 @@ namespace vr6Motion
                 enabledControls(true);
                 //string selectedPort = comboxSelectPort.SelectedItem.ToString();
                 
-                port = new SerialPort("COM14", 19200, Parity.None, 8, StopBits.One);
+                port = new SerialPort("COM7", 19200, Parity.None, 8, StopBits.One);
                 port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
                 port.Open();
                 //port.Write("START\n");
@@ -286,7 +322,7 @@ namespace vr6Motion
         {
             if (connectPortBtn.Content == "Disconnect")
             {
-                //port.Write("[rdV]");
+                port.Write("[rdV]");
                 //port.Write("[rdb]");
                 //port.Write("[rdc]");
 

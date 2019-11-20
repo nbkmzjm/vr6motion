@@ -79,7 +79,7 @@
         <Button x:Name="StepN" Content="-" HorizontalAlignment="Left" Margin="94,149,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="28" Height="22" Click="StepN_Click" />
         <Label x:Name="StepLabel" Content="Step" HorizontalAlignment="Left" Margin="48,143,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" FontSize="16"/>
         <Label x:Name="StepValue" Content="1" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="122,142,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="33" FontSize="16"/>
-        <TextBox HorizontalAlignment="Left" Margin="23,47,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Column="1"/>
+        <TextBox x:Name="TextBoxX" HorizontalAlignment="Left" Margin="23,47,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Column="1"/>
         <Button Content="Button" Grid.Column="1" HorizontalAlignment="Center" Margin="0,46,0,0" VerticalAlignment="Top"/>
 
     </Grid>

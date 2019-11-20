@@ -927,9 +927,15 @@ void ParseCommand(int ComPort)
                         SendTwoValues('U',CutoffLimitMin3,InputClipMin3,ComPort);
                         break;
                     case 'V':
-                        SendTwoValues('V',DeadZone1,PWMrev1,ComPort);
-                        Serial.write("[*oko*]");
-                        SendValue('D',Kp1_x100,ComPort);
+                        // SendTwoValues('V',DeadZone1,PWMrev1,ComPort);
+                        
+                        Serial.write(START_BYTE);
+                        Serial.write('V');
+                        Serial.write('A');
+                        Serial.write('B');
+                        Serial.write(END_BYTE);
+                        // Serial.write("{*[oko]*}");
+                        // SendValue('D',Kp1_x100,ComPort);
                         
                         break;
                     case 'W':
