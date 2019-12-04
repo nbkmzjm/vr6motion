@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Timers;
 
 namespace vr6Motion
 {
@@ -34,10 +35,13 @@ namespace vr6Motion
         int Kp = 0;
         int Feedback = 0;
         int Target = 0;
+        private readonly Stopwatch sw = new Stopwatch();
 
+        
 
         private void SerialDataProcess(char[] data)
         {
+
             Debug.Write("0: ");
             Debug.Write(data[0]);
             Debug.Write("=");
@@ -211,8 +215,10 @@ namespace vr6Motion
             }
         }
 
-        
 
+        System.Timers.Timer aTimer = new System.Timers.Timer();
+        
+        
         
 
 
@@ -225,13 +231,18 @@ namespace vr6Motion
                 enabledControls(true);
                 //string selectedPort = comboxSelectPort.SelectedItem.ToString();
                 
-                port = new SerialPort("COM7", 500000, Parity.None, 8, StopBits.One);
+                port = new SerialPort("COM14", 500000, Parity.None, 8, StopBits.One);
                 port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
                 port.Encoding = Encoding.GetEncoding(28591);
                 port.Open();
                 //port.Write("START\n");
+                aTimer.Elapsed += new ElapsedEventHandler(saveParam);
+                aTimer.Interval = 3000;
                 connectPortBtn.Content = "Disconnect";
                 comboxSelectPort.IsEnabled = false;
+
+                
+
             }
             else
             {
@@ -240,12 +251,38 @@ namespace vr6Motion
         }
 
         private void DisconnectToArdu()
+
         {
+            aTimer.Stop();
             isConnected = false;
             enabledControls(false);
             comboxSelectPort.IsEnabled = true;
             connectPortBtn.Content = "Connect";
             port.Close();
+            
+            
+        }
+
+        private void saveParam(object source, ElapsedEventArgs e)
+        {
+            Debug.WriteLine("SAVE!");
+            port.Write("[sav]");
+            aTimer.Stop();
+        }
+
+        private void activateTimer()
+        {
+            if (aTimer.Enabled != true)
+            {
+
+                aTimer.Enabled = true;
+
+            }
+            else if (aTimer.Enabled == true)
+            {
+                aTimer.Stop();
+                aTimer.Start();
+            }
         }
        
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -274,8 +311,80 @@ namespace vr6Motion
         {
             //port.Write("[V21]");
         }
-
         
+        private void UpdFirstParam(int param1, int param2, string val1, string val2, string PorN)
+        {
+            activateTimer();
+            stepValue = Int32.Parse(StepValue.Content.ToString());
+            
+            string val = comboxMotor.SelectedValue.ToString();
+            int updValue = 0;
+
+            if (PorN == "P")
+            {
+                updValue = param1 + stepValue;
+            }
+            else if (PorN == "N")
+            {
+                updValue = param1 - stepValue;
+            }
+            if (param2 == -1)
+            {
+
+                if (val == "1")
+                {
+                    sendOneVal("D", updValue);
+                    port.Write("[rdD]");
+                }
+                else if (val == "2")
+                {
+                    sendOneVal("E", updValue);
+                    port.Write("[rdE]");
+                }
+            }
+            else
+            {
+
+                if (val == "1")
+                {
+                    sendTwoVal(val1, updValue, param2);
+                    port.Write("[rd" + val1 + "]");
+                }
+                else if (val == "2")
+                {
+                    sendTwoVal(val2, updValue, param2);
+                    port.Write("[rd" + val2 + "]");
+                }
+            }
+        }
+
+        private void UpdSecondParam(int param1, int param2, string val1, string val2, string PorN)
+        {
+            activateTimer();
+            stepValue = Int32.Parse(StepValue.Content.ToString());
+            int updValue= 0 ;
+            if (PorN == "P")
+            {
+                updValue = param2 + stepValue;
+            }
+            else if (PorN == "N")
+            {
+                updValue = param2 - stepValue;
+            }
+
+            string val = comboxMotor.SelectedValue.ToString();
+
+            if (val == "1")
+            {
+                sendTwoVal(val1, param1, updValue);
+                port.Write("[rd" + val1 + "]");
+            }
+            else if (val == "2")
+            {
+                sendTwoVal(val2, param1, updValue);
+                port.Write("[rd" + val2 + "]");
+            }
+        }
 
         private void DeadZoneP_Click(object sender, RoutedEventArgs e)
         {
@@ -284,28 +393,9 @@ namespace vr6Motion
             //DeadZoneValue.Text = DeadZoneValue.Text + 1;
             //String sendData = "[" + char.ToString(x) + char.ToString(x) + char.ToString(x) + "]";
 
-
-            stepValue = Int32.Parse(StepValue.Content.ToString());
-            int updValue = deadZone + stepValue;
-            string val = comboxMotor.SelectedValue.ToString();
+            UpdFirstParam(deadZone, PWMrev, "V", "W", "P");
 
            
-
-
-           
-            
-            if (val == "1")
-            {
-                sendTwoVal("V", updValue, PWMrev);
-                port.Write("[sav]");
-                port.Write("[rdV]");
-            }
-            else if (val == "2")
-            {
-                sendTwoVal("W", updValue, PWMrev);
-                port.Write("[sav]");
-                port.Write("[rdW]");
-            }
         }
 
         private void sendTwoVal(string header, int val1, int val2)
@@ -341,15 +431,7 @@ namespace vr6Motion
         private void DeadZoneN_Click(object sender, RoutedEventArgs e)
         {
 
-
-
-
-            stepValue = Int32.Parse(StepValue.Content.ToString());
-            int updValue = deadZone - stepValue;
-            if (updValue < 0) { updValue = 0; }
-            sendTwoVal("V", updValue, PWMrev);
-            port.Write("[sav]");
-            port.Write("[rdV]");
+            UpdFirstParam(deadZone, PWMrev, "V", "W", "N");
 
         }
 
@@ -421,49 +503,13 @@ namespace vr6Motion
 
         private void PWMrevP_Click(object sender, RoutedEventArgs e)
         {
-            stepValue = Int32.Parse(StepValue.Content.ToString());
-            int updValue = PWMrev + stepValue;
-            string val = comboxMotor.SelectedValue.ToString();
-
-            if (val == "1")
-            {
-                sendTwoVal("V", deadZone, updValue);
-                port.Write("[sav]");
-                port.Write("[rdV]");
-            }
-            else if (val =="2")
-            {
-                sendTwoVal("W", deadZone, updValue);
-                port.Write("[sav]");
-                port.Write("[rdW]");
-            }
+            UpdSecondParam(deadZone, PWMrev, "V", "W", "P");
         }
-
-
      
 
         private void PWMrevN_Click(object sender, RoutedEventArgs e)
         {
-            
-            
-            stepValue = Int32.Parse(StepValue.Content.ToString());
-            int updValue = PWMrev - stepValue;
-            string val = comboxMotor.SelectedValue.ToString();
-            if (val == "1")
-            {
-                sendTwoVal("V", deadZone, updValue);
-                port.Write("[sav]");
-                port.Write("[rdV]");
-            }
-            else if (val == "2")
-            {
-                sendTwoVal("W", deadZone, updValue);
-                port.Write("[sav]");
-                port.Write("[rdW]");
-            }
-            
-            
-             
+            UpdSecondParam(deadZone, PWMrev, "V", "W", "N");
         }
 
         private void StepP_Click(object sender, RoutedEventArgs e)
@@ -490,43 +536,15 @@ namespace vr6Motion
 
         private void KpP_Click(object sender, RoutedEventArgs e)
         {
-            stepValue = Int32.Parse(StepValue.Content.ToString());
-            int updValue = Kp + stepValue;
-            string val = comboxMotor.SelectedValue.ToString();
-
-
-            if (val == "1")
-            {
-                sendOneVal("D", updValue);
-                port.Write("[sav]");
-                port.Write("[rdD]");
-            }
-            else if (val == "2")
-            {
-                sendOneVal("E", updValue);
-                port.Write("[sav]");
-                port.Write("[rdE]");
-            }
+            UpdFirstParam(Kp, -1, "D", "E", "P");
 
         }
 
         private void KpN_Click(object sender, RoutedEventArgs e)
         {
-            stepValue = Int32.Parse(StepValue.Content.ToString());
-            int updValue = Kp - stepValue;
-            string val = comboxMotor.SelectedValue.ToString();
-            if (val == "1")
-            {
-                sendOneVal("D", updValue);
-                port.Write("[sav]");
-                port.Write("[rdD]");
-            }
-            else if (val == "2")
-            {
-                sendOneVal("E", updValue);
-                port.Write("[sav]");
-                port.Write("[rdE]");
-            }
+
+            UpdFirstParam(Kp, -1, "D", "E", "N");
+           
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
