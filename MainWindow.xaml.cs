@@ -295,7 +295,7 @@ namespace vr6Motion
                 enabledControls(true);
                 //string selectedPort = comboxSelectPort.SelectedItem.ToString();
                 
-                port = new SerialPort("COM7", 500000, Parity.None, 8, StopBits.One);
+                port = new SerialPort("COM14", 19200, Parity.None, 8, StopBits.One);
                 port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
                 port.Encoding = Encoding.GetEncoding(28591);
                 port.Open();

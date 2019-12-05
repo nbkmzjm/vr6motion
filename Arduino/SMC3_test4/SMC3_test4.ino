@@ -443,7 +443,7 @@ void setup()
   pinMode(12, INPUT_PULLUP);
   
   if (digitalRead(8) == HIGH){
-    Serial.begin(500000);   
+    Serial.begin(19200);   
   }
 else
 {
@@ -452,10 +452,10 @@ else
 //  
   
    mySerial.begin(19200);
-//    mySerial.listen();
-//    K1.start();
-//    K1.units(10, 250);
-//    K1.home();
+   mySerial.listen();
+   K1.start();
+   K1.units(10, 250);
+   K1.home();
    
 //  if (digitalRead(11) == HIGH){
 ////    ST[0].setTimeout(100);
@@ -1867,38 +1867,38 @@ void TogglePin()
 void loop()
 {
 
-//    limitUpState1 = digitalRead(limitUp1);
-//    limitDownState1 = digitalRead(limitDown1);
-//    Feedback1 = K1.getP().value();
-//  
-//    digitalWrite(ledPin, HIGH);
-//    while (limitUpState1 == LOW)
-//    {
-//          K1.s(100);
-//          Feedback1 = K1.getP().value();
-////          Serial.print("do up..");
-////          Serial.println(Feedback1);
-//          
-//          limitUpState1 = digitalRead(limitUp1);
-//   };
-//
-//    while (limitDownState1 == LOW)
-//    {
-//        K1.s(-100);
-//        Feedback1 = K1.getP().value();
-////        Serial.print("do down..");
-////        Serial.println(Feedback1);
-//       
-//        limitDownState1 = digitalRead(limitDown1);
-//   };
-//
-//   K1.home();
-//   while(Feedback1<300){
-//        Feedback1 = K1.getP().value();
-////        Serial.print("centering..");
-////        Serial.println(Feedback1);
-//        K1.s(100);
-//   }
+   limitUpState1 = digitalRead(limitUp1);
+   limitDownState1 = digitalRead(limitDown1);
+   Feedback1 = K1.getP().value();
+ 
+   digitalWrite(ledPin, HIGH);
+   while (limitUpState1 == LOW)
+   {
+         K1.s(100);
+         Feedback1 = K1.getP().value();
+//          Serial.print("do up..");
+//          Serial.println(Feedback1);
+         
+         limitUpState1 = digitalRead(limitUp1);
+  };
+
+   while (limitDownState1 == LOW)
+   {
+       K1.s(-100);
+       Feedback1 = K1.getP().value();
+//        Serial.print("do down..");
+//        Serial.println(Feedback1);
+      
+       limitDownState1 = digitalRead(limitDown1);
+  };
+
+  K1.home();
+  while(Feedback1<300){
+       Feedback1 = K1.getP().value();
+//        Serial.print("centering..");
+//        Serial.println(Feedback1);
+       K1.s(100);
+  }
      //Read all stored Parameters from EEPROM
 
     ReadEEProm();
@@ -1981,80 +1981,80 @@ void loop()
         PIDProcessCounter=0;
               
               
-//               Target = analogRead(targetPot);
-// //              Serial.print("targetPot.................: ");
-// //              Serial.print(Target);
-//               limitUpState1 = digitalRead(limitUp1);
-//               limitDownState1 = digitalRead(limitDown1);
+            //   Target = analogRead(targetPot);
+//              Serial.print("targetPot.................: ");
+//              Serial.print(Target);
+              limitUpState1 = digitalRead(limitUp1);
+              limitDownState1 = digitalRead(limitDown1);
 
-//              digitalWrite(ledPin, LOW);
-//              Feedback1 = K1.getP().value();
-// //             Serial.print("Ready..");
-// //             Serial.println(Feedback1);
+             digitalWrite(ledPin, LOW);
+             Feedback1 = K1.getP().value();
+//             Serial.print("Ready..");
+//             Serial.println(Feedback1);
 
               
             
 
-//             if(Feedback1 < -10 || Feedback1 > 700 ){
-//               digitalWrite(ledPin, HIGH);
-//               K1.s(0);
-// //            }else if (Feedback1 - PreFeedback1 > 100){
-// ////              Serial.print(Feedback1);
-// ////              Serial.print("--");
-// ////              Serial.println(Feedback1 - PreFeedback1);
-// //              digitalWrite(ledPin, HIGH);
-// //              ST[0].motor(1,0);
-// //              ST[0].motor(1,0);
+            if(Feedback1 < -10 || Feedback1 > 700 ){
+              digitalWrite(ledPin, HIGH);
+              K1.s(0);
+//            }else if (Feedback1 - PreFeedback1 > 100){
+////              Serial.print(Feedback1);
+////              Serial.print("--");
+////              Serial.println(Feedback1 - PreFeedback1);
+//              digitalWrite(ledPin, HIGH);
+//              ST[0].motor(1,0);
+//              ST[0].motor(1,0);
               
-//             }else{ 
+            }else{ 
              
 
-// //              ST[0].setTimeout(500);
-//               if (limitUpState1 == HIGH) {
+//              ST[0].setTimeout(500);
+              if (limitUpState1 == HIGH) {
                 
-// //                  if(currentMillis - previousMillis > 300){
-// //                    digitalWrite(ledPin, HIGH);
-// //                    K1.s(0);
-// //                  }else{
-//                     K1.s(-100);
-// //                  }
+//                  if(currentMillis - previousMillis > 300){
+//                    digitalWrite(ledPin, HIGH);
+//                    K1.s(0);
+//                  }else{
+                    K1.s(-100);
+//                  }
                
-//               }else if(limitDownState1 == HIGH){
-// //                  if(currentMillis - previousMillis > 300){
-// //                    digitalWrite(ledPin, HIGH);
-// //                    K1.s(0);
-// //                  }else{
-//                     K1.s(100);
-// //                  }
-//               } else {
-//                   digitalWrite(ledPin, LOW);
-//                   Feedback1 = K1.getP().value();
-//                   Target = analogRead(targetPot);
-// //                  Serial.print("targetPot.................: ");
-// //                  Serial.print(Target);
+              }else if(limitDownState1 == HIGH){
+//                  if(currentMillis - previousMillis > 300){
+//                    digitalWrite(ledPin, HIGH);
+//                    K1.s(0);
+//                  }else{
+                    K1.s(100);
+//                  }
+              } else {
+                  digitalWrite(ledPin, LOW);
+                  Feedback1 = K1.getP().value();
+                //   Target = analogRead(targetPot);
+//                  Serial.print("targetPot.................: ");
+//                  Serial.print(Target);
                     
-//                   PWMout1=CalcMotor1PID(Target,Feedback1);
-// //                  Serial.print("PWM.................: ");
-// //                  Serial.print(PWMout1);
-//                   SetOutputsMotor1();
-// //                  Feedback1 = map(encoderCounter1, -25000, 25000, 0, 1023);
+                  PWMout1=CalcMotor1PID(Target1,Feedback1);
+//                  Serial.print("PWM.................: ");
+//                  Serial.print(PWMout1);
+                  SetOutputsMotor1();
+//                  Feedback1 = map(encoderCounter1, -25000, 25000, 0, 1023);
               
-// //                  deltaPos = abs(Feedback1 - Target);
-// ////                  accumDeltaPos += deltaPos;
-// //                  if(deltaPos > 50){
-// //                    motorOut1 = 250;
-// //                  }else{
-// //                    motorOut1 = map(deltaPos, 0, 50,0, 250);
-// //                  }
-// //                  
-// //                  if(Feedback1 - Target > 0){
-// //                    motorOut1 = -motorOut1;
-// //                  }    
-// //                  K1.s(motorOut1);
-//                   previousMillis = currentMillis;
-// //              }
-//             }
-//           }   
+//                  deltaPos = abs(Feedback1 - Target);
+////                  accumDeltaPos += deltaPos;
+//                  if(deltaPos > 50){
+//                    motorOut1 = 250;
+//                  }else{
+//                    motorOut1 = map(deltaPos, 0, 50,0, 250);
+//                  }
+//                  
+//                  if(Feedback1 - Target > 0){
+//                    motorOut1 = -motorOut1;
+//                  }    
+//                  K1.s(motorOut1);
+                  previousMillis = currentMillis;
+//              }
+            }
+          }   
           
         }
 
