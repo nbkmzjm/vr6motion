@@ -542,6 +542,8 @@ namespace vr6Motion
                 port.Write("[rdP]");
                 port.Write("[rdS]");
                 port.Write("[rdV]");
+                port.Write("[en1]");
+                port.Write("[mo1]");
 
             }
             else if (val == "2")
@@ -554,6 +556,12 @@ namespace vr6Motion
                 port.Write("[rdQ]");
                 port.Write("[rdT]");
                 port.Write("[rdW]");
+                port.Write("[en2]");
+                port.Write("[mo2]");
+            }
+            else
+            {
+                port.Write("[mo0]");
             }
         }
 
@@ -615,9 +623,18 @@ namespace vr6Motion
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            string val = comboxMotor.SelectedValue.ToString();
+            if (val == "1")
+            {
+                sendOneVal("A", (int)TargetSlider.Value);
+                port.Write("[rdA]");
+            }
+            else if(val == "2")
+            {
+                sendOneVal("B", (int)TargetSlider.Value);
+                port.Write("[rdB]");
+            }
             
-            sendOneVal("A", (int)TargetSlider.Value);
-            port.Write("[rdA]");
         }
 
         private void KiP_Click(object sender, RoutedEventArgs e)
