@@ -31,13 +31,22 @@ namespace vr6Motion
 
         int deadZone = 0;
         int PWMrev = 0;
+        int PWMmin = 0;
+        int PWMmax = 0;
+        int maxLimit = 0;
+        int clipInput = 0; 
         int stepValue;
         int Kp = 0;
+        int Ki = 0;
+        int Kd = 0;
+        int Ks = 0;
+
         int Feedback = 0;
         int Target = 0;
-        private readonly Stopwatch sw = new Stopwatch();
-
         
+        System.Timers.Timer aTimer = new System.Timers.Timer();
+
+
 
         private void SerialDataProcess(char[] data)
         {
@@ -76,6 +85,68 @@ namespace vr6Motion
                     TargetBarValue.Value = Target;
                     break;
 
+                case 'D':
+                    Kp = (int)data[1] * 256 + (int)data[2];
+                    KpValue.Content = Kp.ToString();
+                    break;
+                case 'E':
+                    Kp = (int)data[1] * 256 + (int)data[2];
+                    KpValue.Content = Kp.ToString();
+                    break;
+
+                case 'G':
+                    Ki = (int)data[1] * 256 + (int)data[2];
+                    KiValue.Content = Ki.ToString();
+                    break;
+                case 'H':
+                    Ki = (int)data[1] * 256 + (int)data[2];
+                    KiValue.Content = Ki.ToString();
+                    break;
+
+                case 'J':
+                    Kd = (int)data[1] * 256 + (int)data[2];
+                    KdValue.Content = Kd.ToString();
+                    break;
+                case 'K':
+                    Kd = (int)data[1] * 256 + (int)data[2];
+                    KdValue.Content = Kd.ToString();
+                    break;
+
+                case 'M':
+                    Ks = (int)data[1] * 256 + (int)data[2];
+                    KsValue.Content = Ks.ToString();
+                    break;
+                case 'N':
+                    Ks = (int)data[1] * 256 + (int)data[2];
+                    KsValue.Content = Ks.ToString();
+                    break;
+
+                case 'P':
+                    PWMmin = (int)data[1];
+                    PWMminValue.Content = PWMmin.ToString();
+                    PWMmax = (int)data[2];
+                    PWMmaxValue.Content = PWMmax.ToString();
+                    break;
+                case 'Q':
+                    PWMmin = (int)data[1];
+                    PWMminValue.Content = PWMmin.ToString();
+                    PWMmax = (int)data[2];
+                    PWMmaxValue.Content = PWMmax.ToString();
+                    break;
+
+                case 'S':
+                    maxLimit = (int)data[1];
+                    MaxLimitValue.Content = maxLimit.ToString();
+                    clipInput = (int)data[2];
+                    ClipInputValue.Content = clipInput.ToString();
+                    break;
+                case 'T':
+                    maxLimit = (int)data[1];
+                    MaxLimitValue.Content = maxLimit.ToString();
+                    clipInput = (int)data[2];
+                    ClipInputValue.Content = clipInput.ToString();
+                    break;
+
                 case 'V':
                     deadZone = (int)data[1];
                     DeadZoneValue.Content = deadZone.ToString();
@@ -91,14 +162,7 @@ namespace vr6Motion
 
 
 
-                case 'D':
-                    Kp = (int)data[1] * 256 + (int)data[2];
-                    KpValue.Content = Kp.ToString();
-                    break;
-                case 'E':
-                    Kp = (int)data[1] * 256 + (int)data[2];
-                    KpValue.Content = Kp.ToString();
-                    break;
+                
 
             }
 
@@ -216,7 +280,7 @@ namespace vr6Motion
         }
 
 
-        System.Timers.Timer aTimer = new System.Timers.Timer();
+        
         
         
         
@@ -231,7 +295,7 @@ namespace vr6Motion
                 enabledControls(true);
                 //string selectedPort = comboxSelectPort.SelectedItem.ToString();
                 
-                port = new SerialPort("COM14", 500000, Parity.None, 8, StopBits.One);
+                port = new SerialPort("COM7", 500000, Parity.None, 8, StopBits.One);
                 port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
                 port.Encoding = Encoding.GetEncoding(28591);
                 port.Open();
@@ -333,13 +397,13 @@ namespace vr6Motion
 
                 if (val == "1")
                 {
-                    sendOneVal("D", updValue);
-                    port.Write("[rdD]");
+                    sendOneVal(val1, updValue);
+                    port.Write("[rd" + val1 + "]");
                 }
                 else if (val == "2")
                 {
-                    sendOneVal("E", updValue);
-                    port.Write("[rdE]");
+                    sendOneVal(val2, updValue);
+                    port.Write("[rd" + val2 + "]");
                 }
             }
             else
@@ -455,26 +519,28 @@ namespace vr6Motion
 
         private void ClipInputN_Click(object sender, RoutedEventArgs e)
         {
+            UpdSecondParam(maxLimit, clipInput, "S", "T", "N");
         }
 
         private void ClipInputP_Click(object sender, RoutedEventArgs e)
         {
-
+            UpdSecondParam(maxLimit, clipInput, "S", "T", "P");
         }
 
         private void selectOption_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string val = comboxMotor.SelectedValue.ToString();
-            
-            if(val == "1")
+            TargetSlider.Value = 512;
+            if (val == "1")
             {
+                
                 port.Write("[rdA]");
                 port.Write("[rdD]");
-                //port.Write("[rdG]");
-                //port.Write("[rdJ]");
-                //port.Write("[rdM]");
-                //port.Write("[rdP]");
-                //port.Write("[rdS]");
+                port.Write("[rdG]");
+                port.Write("[rdJ]");
+                port.Write("[rdM]");
+                port.Write("[rdP]");
+                port.Write("[rdS]");
                 port.Write("[rdV]");
 
             }
@@ -482,23 +548,23 @@ namespace vr6Motion
             {
                 port.Write("[rdB]");
                 port.Write("[rdE]");
-                //port.Write("[rdH]");
-                //port.Write("[rdK]");
-                //port.Write("[rdN]");
-                //port.Write("[rdQ]");
-                //port.Write("[rdT]");
+                port.Write("[rdH]");
+                port.Write("[rdK]");
+                port.Write("[rdN]");
+                port.Write("[rdQ]");
+                port.Write("[rdT]");
                 port.Write("[rdW]");
             }
         }
 
         private void MaxLimitP_Click(object sender, RoutedEventArgs e)
         {
-
+            UpdFirstParam(maxLimit, clipInput, "S", "T", "P");
         }
 
         private void MaxLimitN_Click(object sender, RoutedEventArgs e)
         {
-
+            UpdFirstParam(maxLimit, clipInput, "S", "T", "N");
         }
 
         private void PWMrevP_Click(object sender, RoutedEventArgs e)
@@ -552,6 +618,56 @@ namespace vr6Motion
             
             sendOneVal("A", (int)TargetSlider.Value);
             port.Write("[rdA]");
+        }
+
+        private void KiP_Click(object sender, RoutedEventArgs e)
+        {
+            UpdFirstParam(Ki, -1, "G", "H", "P");
+        }
+
+        private void KiN_Click(object sender, RoutedEventArgs e)
+        {
+            UpdFirstParam(Ki, -1, "G", "H", "N");
+        }
+
+        private void KdP_Click(object sender, RoutedEventArgs e)
+        {
+            UpdFirstParam(Kd, -1, "J", "K", "P");
+        }
+
+        private void KdN_Click(object sender, RoutedEventArgs e)
+        {
+            UpdFirstParam(Kd, -1, "J", "K", "N");
+        }
+
+        private void KsN_Click(object sender, RoutedEventArgs e)
+        {
+            UpdFirstParam(Ks, -1, "M", "N", "N");
+        }
+
+        private void KsP_Click(object sender, RoutedEventArgs e)
+        {
+            UpdFirstParam(Ks, -1, "M", "N", "P");
+        }
+
+        private void PWMminP_Click(object sender, RoutedEventArgs e)
+        {
+            UpdFirstParam(PWMmin, PWMmax, "P", "Q", "P");
+        }
+
+        private void PWMminN_Click(object sender, RoutedEventArgs e)
+        {
+            UpdFirstParam(PWMmin, PWMmax, "P", "Q", "N");
+        }
+
+        private void PWMmaxP_Click(object sender, RoutedEventArgs e)
+        {
+            UpdSecondParam(PWMmin, PWMmax, "P", "Q", "P");
+        }
+
+        private void PWMmaxN_Click(object sender, RoutedEventArgs e)
+        {
+            UpdSecondParam(PWMmin, PWMmax, "P", "Q", "N");
         }
     }
 }

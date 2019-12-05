@@ -43,12 +43,12 @@
         <Button x:Name="PWMrevN" Content="-" HorizontalAlignment="Left" Margin="346,212,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="PWMrevN_Click" />
         <Label x:Name="PWMrevLabel" Content="PWMrev" HorizontalAlignment="Left" Margin="227,208,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
         <Label x:Name="PWMrevValue" Content="0" HorizontalAlignment="Left" Margin="306,208,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="29"/>
-        <Button x:Name="PWMmaxP" Content="+" HorizontalAlignment="Left" Margin="369,181,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
-        <Button x:Name="PWMmaxN" Content="-" HorizontalAlignment="Left" Margin="346,181,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
+        <Button x:Name="PWMmaxP" Content="+" HorizontalAlignment="Left" Margin="369,181,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="PWMmaxP_Click" />
+        <Button x:Name="PWMmaxN" Content="-" HorizontalAlignment="Left" Margin="346,181,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="PWMmaxN_Click" />
         <Label x:Name="PWMmaxLabel" Content="PWMmax" HorizontalAlignment="Left" Margin="227,178,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
         <Label x:Name="PWMmaxValue" Content="0" HorizontalAlignment="Left" Margin="306,178,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="29"/>
-        <Button x:Name="PWMminP" Content="+" HorizontalAlignment="Left" Margin="369,155,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
-        <Button x:Name="PWMminN" Content="-" HorizontalAlignment="Left" Margin="346,155,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
+        <Button x:Name="PWMminP" Content="+" HorizontalAlignment="Left" Margin="369,155,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="PWMminP_Click" />
+        <Button x:Name="PWMminN" Content="-" HorizontalAlignment="Left" Margin="346,155,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="PWMminN_Click" />
         <Label x:Name="PWMminLabel" Content="PWMmin" HorizontalAlignment="Left" Margin="227,152,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
         <Label x:Name="PWMminValue" Content="0" HorizontalAlignment="Left" Margin="306,152,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="29"/>
         <Button x:Name="FpwmP" Content="+" HorizontalAlignment="Left" Margin="369,129,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
@@ -63,16 +63,16 @@
         <Button x:Name="KpN" Content="-" HorizontalAlignment="Left" Margin="137,214,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KpN_Click" />
         <Label x:Name="KpLabel" Content="Kp=" HorizontalAlignment="Left" Margin="50,212,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
         <Label x:Name="KpValue" Content="0" HorizontalAlignment="Left" Margin="87,212,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="45"/>
-        <Button x:Name="KiP" Content="+" HorizontalAlignment="Left" Margin="161,243,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
-        <Button x:Name="KiN" Content="-" HorizontalAlignment="Left" Margin="137,243,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
+        <Button x:Name="KiP" Content="+" HorizontalAlignment="Left" Margin="161,243,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KiP_Click" />
+        <Button x:Name="KiN" Content="-" HorizontalAlignment="Left" Margin="137,243,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KiN_Click" />
         <Label x:Name="KiLabel" Content="Ki=" HorizontalAlignment="Left" Margin="51,241,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
         <Label x:Name="KiValue" Content="0" HorizontalAlignment="Left" Margin="87,241,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="45"/>
-        <Button x:Name="KdP" Content="+" HorizontalAlignment="Left" Margin="161,267,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
-        <Button x:Name="KdN" Content="-" HorizontalAlignment="Left" Margin="137,267,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
-        <Label x:Name="KdLabel" Content="Ki=" HorizontalAlignment="Left" Margin="50,264,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
+        <Button x:Name="KdP" Content="+" HorizontalAlignment="Left" Margin="161,267,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KdP_Click" />
+        <Button x:Name="KdN" Content="-" HorizontalAlignment="Left" Margin="137,267,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KdN_Click" />
+        <Label x:Name="KdLabel" Content="Kd=" HorizontalAlignment="Left" Margin="50,264,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
         <Label x:Name="KdValue" Content="0" HorizontalAlignment="Left" Margin="87,264,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="45"/>
-        <Button x:Name="KsP" Content="+" HorizontalAlignment="Left" Margin="161,292,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
-        <Button x:Name="KsN" Content="-" HorizontalAlignment="Left" Margin="137,292,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
+        <Button x:Name="KsP" Content="+" HorizontalAlignment="Left" Margin="161,292,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KsP_Click" />
+        <Button x:Name="KsN" Content="-" HorizontalAlignment="Left" Margin="137,292,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KsN_Click" />
         <Label x:Name="KsLabel" Content="Ks=" HorizontalAlignment="Left" Margin="51,290,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
         <Label x:Name="KsValue" Content="0" HorizontalAlignment="Left" Margin="87,290,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="45"/>
         <Button x:Name="StepP" Content="+" HorizontalAlignment="Left" Margin="160,149,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="26" Height="22" Click="StepP_Click" />
