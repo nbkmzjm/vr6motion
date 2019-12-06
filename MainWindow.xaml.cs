@@ -34,7 +34,7 @@ namespace vr6Motion
         int PWMmin = 0;
         int PWMmax = 0;
         int maxLimit = 0;
-        int clipInput = 0; 
+        int clipInput = 0;
         int stepValue;
         int Kp = 0;
         int Ki = 0;
@@ -43,7 +43,7 @@ namespace vr6Motion
 
         int Feedback = 0;
         int Target = 0;
-        
+
         System.Timers.Timer aTimer = new System.Timers.Timer();
 
 
@@ -73,9 +73,9 @@ namespace vr6Motion
             {
 
                 case 'A':
-                    Feedback = (int)data[1]*4;
+                    Feedback = (int)data[1] * 4;
                     FeedBackBarValue.Value = Feedback;
-                    Target = (int)data[2]*4;
+                    Target = (int)data[2] * 4;
                     TargetBarValue.Value = Target;
                     break;
                 case 'B':
@@ -162,7 +162,7 @@ namespace vr6Motion
 
 
 
-                
+
 
             }
 
@@ -185,9 +185,9 @@ namespace vr6Motion
 
         private void getAvailablePorts()
         {
-            
+
             ports = SerialPort.GetPortNames();
-            if (ports.Length<1)
+            if (ports.Length < 1)
             {
                 MessageBox.Show("Please check devive USB connection!!");
                 this.Close();
@@ -204,7 +204,7 @@ namespace vr6Motion
             Thread.Sleep(500);
             SerialPort sp = (SerialPort)sender;
             //string data = sp.ReadExisting();
-            
+
 
             //Debug.Print("data:-----------");
             //Debug.Print(data);
@@ -280,22 +280,16 @@ namespace vr6Motion
         }
 
 
-        
-        
-        
-        
-
-
         private void ConnectToArdu()
         {
             if (!isConnected)
             {
                 isConnected = true;
 
-                enabledControls(true);
+
                 //string selectedPort = comboxSelectPort.SelectedItem.ToString();
-                
-                port = new SerialPort("COM14", 19200, Parity.None, 8, StopBits.One);
+
+                port = new SerialPort("COM7", 19200, Parity.None, 8, StopBits.One);
                 port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
                 port.Encoding = Encoding.GetEncoding(28591);
                 port.Open();
@@ -304,9 +298,6 @@ namespace vr6Motion
                 aTimer.Interval = 3000;
                 connectPortBtn.Content = "Disconnect";
                 comboxSelectPort.IsEnabled = false;
-
-                
-
             }
             else
             {
@@ -322,9 +313,10 @@ namespace vr6Motion
             enabledControls(false);
             comboxSelectPort.IsEnabled = true;
             connectPortBtn.Content = "Connect";
+            port.Write("[mo0]");
             port.Close();
-            
-            
+
+
         }
 
         private void saveParam(object source, ElapsedEventArgs e)
@@ -348,7 +340,7 @@ namespace vr6Motion
                 aTimer.Start();
             }
         }
-       
+
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (isConnected)
@@ -359,13 +351,39 @@ namespace vr6Motion
 
         private void enabledControls(bool state)
         {
-            led13CheckBox.IsEnabled = state;
+
             DeadZoneN.IsEnabled = state;
             DeadZoneP.IsEnabled = state;
             ClipInputN.IsEnabled = state;
             ClipInputP.IsEnabled = state;
+            FpwmN.IsEnabled = state;
+            FpwmP.IsEnabled = state;
+            FpidP.IsEnabled = state;
+            FpidN.IsEnabled = state;
+            KpP.IsEnabled = state;
+            KpN.IsEnabled = state;
+            KiP.IsEnabled = state;
+            KiN.IsEnabled = state;
+            KdP.IsEnabled = state;
+            KdN.IsEnabled = state;
+            KsP.IsEnabled = state;
+            KsN.IsEnabled = state;
+            StepP.IsEnabled = state;
+            StepN.IsEnabled = state;
+            MaxLimitP.IsEnabled = state;
+            MaxLimitN.IsEnabled = state;
+            PWMrevP.IsEnabled = state;
+            PWMrevN.IsEnabled = state;
+            PWMmaxP.IsEnabled = state;
+            PWMmaxN.IsEnabled = state;
+            PWMminP.IsEnabled = state;
+            PWMminN.IsEnabled = state;
+            TargetSlider.IsEnabled = state;
+
+
+
         }
-        
+
         private void led13CheckBox_Checked(object sender, RoutedEventArgs e)
         {
             //DeadZoneValue.Text = "2";
@@ -375,12 +393,12 @@ namespace vr6Motion
         {
             //port.Write("[V21]");
         }
-        
+
         private void UpdFirstParam(int param1, int param2, string val1, string val2, string PorN)
         {
             activateTimer();
             stepValue = Int32.Parse(StepValue.Content.ToString());
-            
+
             string val = comboxMotor.SelectedValue.ToString();
             int updValue = 0;
 
@@ -426,7 +444,7 @@ namespace vr6Motion
         {
             activateTimer();
             stepValue = Int32.Parse(StepValue.Content.ToString());
-            int updValue= 0 ;
+            int updValue = 0;
             if (PorN == "P")
             {
                 updValue = param2 + stepValue;
@@ -458,8 +476,6 @@ namespace vr6Motion
             //String sendData = "[" + char.ToString(x) + char.ToString(x) + char.ToString(x) + "]";
 
             UpdFirstParam(deadZone, PWMrev, "V", "W", "P");
-
-           
         }
 
         private void sendTwoVal(string header, int val1, int val2)
@@ -474,7 +490,7 @@ namespace vr6Motion
             string valOneString = char.ToString(valOne);
             string valTwoString = char.ToString(valTwo);
 
-            sendData = "["+header + valOneString + valTwoString + "]";
+            sendData = "[" + header + valOneString + valTwoString + "]";
             port.Write(sendData);
         }
 
@@ -482,16 +498,16 @@ namespace vr6Motion
         private void sendOneVal(string header, int val)
         {
             String sendData;
-            if(val < 0) { val = 0; }
-            if(val > 1024) { val = 1024; }
-            int high= (int)(val/256);
+            if (val < 0) { val = 0; }
+            if (val > 1024) { val = 1024; }
+            int high = (int)(val / 256);
             int low = (int)val - (256 * high);
-            
+
             sendData = "[" + header + char.ToString((char)high) + char.ToString((char)low) + "]";
             port.Write(sendData);
         }
 
-        
+
         private void DeadZoneN_Click(object sender, RoutedEventArgs e)
         {
 
@@ -533,7 +549,7 @@ namespace vr6Motion
             TargetSlider.Value = 512;
             if (val == "1")
             {
-                
+
                 port.Write("[rdA]");
                 port.Write("[rdD]");
                 port.Write("[rdG]");
@@ -544,6 +560,7 @@ namespace vr6Motion
                 port.Write("[rdV]");
                 port.Write("[en1]");
                 port.Write("[mo1]");
+                enabledControls(true);
 
             }
             else if (val == "2")
@@ -558,10 +575,12 @@ namespace vr6Motion
                 port.Write("[rdW]");
                 port.Write("[en2]");
                 port.Write("[mo2]");
+                enabledControls(true);
             }
             else
             {
                 port.Write("[mo0]");
+                enabledControls(false);
             }
         }
 
@@ -579,7 +598,7 @@ namespace vr6Motion
         {
             UpdSecondParam(deadZone, PWMrev, "V", "W", "P");
         }
-     
+
 
         private void PWMrevN_Click(object sender, RoutedEventArgs e)
         {
@@ -597,7 +616,7 @@ namespace vr6Motion
             {
                 stepValue = Int32.Parse(StepValue.Content.ToString()) + 5;
             }
-            
+
             StepValue.Content = stepValue.ToString();
         }
 
@@ -618,7 +637,7 @@ namespace vr6Motion
         {
 
             UpdFirstParam(Kp, -1, "D", "E", "N");
-           
+
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -629,12 +648,12 @@ namespace vr6Motion
                 sendOneVal("A", (int)TargetSlider.Value);
                 port.Write("[rdA]");
             }
-            else if(val == "2")
+            else if (val == "2")
             {
                 sendOneVal("B", (int)TargetSlider.Value);
                 port.Write("[rdB]");
             }
-            
+
         }
 
         private void KiP_Click(object sender, RoutedEventArgs e)
