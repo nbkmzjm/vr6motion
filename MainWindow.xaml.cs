@@ -175,6 +175,8 @@ namespace vr6Motion
 
             getAvailablePorts();
             enabledControls(false);
+            comboxMotor.IsEnabled = false;
+            MotorOff.IsEnabled = false;
             foreach (string port in ports)
             {
                 comboxSelectPort.Items.Add(port);
@@ -208,8 +210,8 @@ namespace vr6Motion
 
             //Debug.Print("data:-----------");
             //Debug.Print(data);
-            //Debug.WriteLine("data:-----------");
-
+            Debug.WriteLine("data:-----------");
+            Debug.WriteLine(port.IsOpen);
             int i = sp.BytesToRead;
             Debug.WriteLine(i);
             Debug.WriteLine("---");
@@ -227,54 +229,69 @@ namespace vr6Motion
             {
                 //byte[] data = new byte[i];
                 //sp.Read(data, 0, i);
-                for (int x = 0; x < i; x++)
+
+                if (port.IsOpen)
                 {
-
-                    rxByte = (char)sp.ReadByte();
-                    //Debug.Write(rxByte);
-                    //Debug out put from Arduino when find byte "{" and rxBuffer is not in processing
-                    if (rxByte.ToString() == "{" && bufferEnd == -1)
+                    for (int x = 0; x < i; x++)
                     {
-                        int y = 0;
-                        while (rxByte.ToString() != "}")
+                        //try
+                        //{
+                        rxByte = (char)sp.ReadByte();
+                        if (rxByte.ToString() == "{" && bufferEnd == -1)
                         {
-                            rxByte = (char)sp.ReadByte();
-                            rxBufDebug[y] = rxByte;
-                            y++;
+                            int y = 0;
+                            while (rxByte.ToString() != "}")
+                            {
+                                rxByte = (char)sp.ReadByte();
+                                rxBufDebug[y] = rxByte;
+                                y++;
+                            }
+                            string data = new string(rxBufDebug);
+                            Debug.Print("*****");
+                            Debug.Print(data);
+                            Debug.Print("");
+                            Debug.Print("*****");
                         }
-                        string data = new string(rxBufDebug);
-                        Debug.Print("*****");
-                        Debug.Print(data);
-                        Debug.Print("");
-                        Debug.Print("*****");
-                    }
 
-                    if (bufferEnd == -1)
-                    {
-                        if (rxByte.ToString() != "[")
+                        if (bufferEnd == -1)
                         {
-                            bufferEnd = -1;
+                            if (rxByte.ToString() != "[")
+                            {
+                                bufferEnd = -1;
+                            }
+                            else
+                            {
+                                bufferEnd = 0;
+                            }
                         }
                         else
                         {
-                            bufferEnd = 0;
-                        }
-                    }
-                    else
-                    {
-                        rxBuffer[bufferEnd] = rxByte;
-                        bufferEnd++;
-                        if (bufferEnd > 3)
-                        {
-                            if (rxBuffer[3].ToString() == "]")
+                            rxBuffer[bufferEnd] = rxByte;
+                            bufferEnd++;
+                            if (bufferEnd > 3)
                             {
+                                if (rxBuffer[3].ToString() == "]")
+                                {
 
-                                Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(SerialDataProcess), rxBuffer);
+                                    Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(SerialDataProcess), rxBuffer);
+                                }
+                                bufferEnd = -1;
                             }
-                            bufferEnd = -1;
                         }
-                    }
 
+                        //}
+                        //catch (Exception ex)
+                        //{
+                        //    Console.WriteLine("exxxxxxxxxxxxxxxxxxxxxxxxxx");
+                        //    port.Dispose();
+                        //}
+
+                        //Debug.Write(rxByte);
+                        //Debug out put from Arduino when find byte "{" and rxBuffer is not in processing
+                        
+
+                    }
+                    
                 }
             }
         }
@@ -285,19 +302,29 @@ namespace vr6Motion
             if (!isConnected)
             {
                 isConnected = true;
-
+                comboxMotor.IsEnabled = true;
+                MotorOff.IsEnabled = true;
 
                 //string selectedPort = comboxSelectPort.SelectedItem.ToString();
 
-                port = new SerialPort("COM14", 19200, Parity.None, 8, StopBits.One);
+                port = new SerialPort("COM7", 19200, Parity.None, 8, StopBits.One);
                 port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
                 port.Encoding = Encoding.GetEncoding(28591);
-                port.Open();
+                
+                try {
+                    port.Open();
+                }
+                catch (Exception ex)
+                {
+                   
+                }
+                
                 //port.Write("START\n");
                 aTimer.Elapsed += new ElapsedEventHandler(saveParam);
                 aTimer.Interval = 3000;
                 connectPortBtn.Content = "Disconnect";
                 comboxSelectPort.IsEnabled = false;
+                
             }
             else
             {
@@ -312,11 +339,12 @@ namespace vr6Motion
             isConnected = false;
             enabledControls(false);
             comboxSelectPort.IsEnabled = true;
+            MotorOff.IsEnabled = true;
             connectPortBtn.Content = "Connect";
             port.Write("[mo0]");
             sendOneVal("A", 350);
             sendOneVal("B", 350);
-            port.Close();
+            this.Close();
 
 
         }
@@ -527,13 +555,7 @@ namespace vr6Motion
             ConnectToArdu();
         }
 
-        private void connectPortBtn_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            if (connectPortBtn.Content == "Disconnect")
-            {
-                //port.Write("[rdV]");
-            }
-        }
+        
 
         private void ClipInputN_Click(object sender, RoutedEventArgs e)
         {
@@ -581,6 +603,7 @@ namespace vr6Motion
             }
             else
             {
+                
                 port.Write("[mo0]");
                 enabledControls(false);
             }
@@ -706,6 +729,14 @@ namespace vr6Motion
         private void PWMmaxN_Click(object sender, RoutedEventArgs e)
         {
             UpdSecondParam(PWMmin, PWMmax, "P", "Q", "N");
+        }
+
+
+        private void MotorOff_Click(object sender, RoutedEventArgs e)
+        {
+            port.Write("[mo0]");
+            enabledControls(false);
+            comboxMotor.Text = "OFF";
         }
     }
 }

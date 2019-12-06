@@ -16,16 +16,16 @@
             <ColumnDefinition Width="217*"/>
             <ColumnDefinition Width="83*"/>
         </Grid.ColumnDefinitions>
-        <ComboBox x:Name="comboxSelectPort" HorizontalAlignment="Left" Margin="91,20,0,0" VerticalAlignment="Top" Width="120" Height="22"/>
+        <ComboBox x:Name="comboxSelectPort" HorizontalAlignment="Left" Margin="91,20,0,0" VerticalAlignment="Top" Width="88" Height="22"/>
         <Label x:Name="selPortLabel" Content="Select Port:" HorizontalAlignment="Left" Margin="8,16,0,0" VerticalAlignment="Top" Width="82" Height="26"/>
-        <Button x:Name="connectPortBtn" Content="Connect" HorizontalAlignment="Left" Margin="252,32,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.125,1.204" PreviewMouseLeftButtonDown="connectPortBtn_PreviewMouseLeftButtonDown" PreviewMouseLeftButtonUp="connectPortBtn_PreviewMouseLeftButtonUp" Height="20" Width="48"   />
+        <Button x:Name="connectPortBtn" Content="Connect" HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.125,1.204" PreviewMouseLeftButtonDown="connectPortBtn_PreviewMouseLeftButtonDown"  Height="20" Width="62"   />
         <Button x:Name="DeadZoneP" Content="+" HorizontalAlignment="Left" Margin="358,252,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="DeadZoneP_Click"/>
         <Button x:Name="DeadZoneN" Content="-" HorizontalAlignment="Left" Margin="335,252,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="DeadZoneN_Click"/>
         <Label x:Name="DeadZoneLablel" Content="DeadZone=" HorizontalAlignment="Left" Margin="227,242,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Height="26" Width="73"/>
         <Label x:Name="ClipInputLabel" Content="ClipInput=" HorizontalAlignment="Left" Margin="227,269,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Height="26" Width="66"/>
         <Button x:Name="ClipInputP" Content="+" HorizontalAlignment="Left" Margin="358,278,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="ClipInputP_Click"/>
         <Button x:Name="ClipInputN" Content="-" HorizontalAlignment="Left" Margin="335,278,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="ClipInputN_Click"/>
-        <ComboBox x:Name="comboxMotor" HorizontalAlignment="Left" Margin="91,47,0,0" VerticalAlignment="Top" Width="120"
+        <ComboBox x:Name="comboxMotor" HorizontalAlignment="Left" Margin="91,47,0,0" VerticalAlignment="Top" Width="88"
                 SelectionChanged="selectOption_SelectionChanged" 
                 SelectedValue="{Binding VMselectedOption, Mode=TwoWay}" 
                 SelectedValuePath="Content" Height="22"
@@ -114,6 +114,7 @@
                 VerticalAlignment="Top" 
                 Width="352"
                 Maximum="1024" ValueChanged="Slider_ValueChanged" Height="23"/>
+        <Button x:Name="MotorOff" Content="OFF" HorizontalAlignment="Left" Margin="186,48,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.125,1.204"   Height="20" Width="36" Click="MotorOff_Click"  />
 
     </Grid>
 </Window>
