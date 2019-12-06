@@ -6,115 +6,114 @@
         xmlns:local="clr-namespace:vr6Motion"
         mc:Ignorable="d"
         Closing="Window_Closing"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="500" Width="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="122*"/>
-            <RowDefinition Height="95*"/>
+
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="87*"/>
-            <ColumnDefinition Width="73*"/>
+            <ColumnDefinition Width="217*"/>
+            <ColumnDefinition Width="83*"/>
         </Grid.ColumnDefinitions>
-        <ComboBox x:Name="comboxSelectPort" HorizontalAlignment="Left" Margin="124,36,0,0" VerticalAlignment="Top" Width="120"/>
-        <Label x:Name="selPortLabel" Content="Select Port:" HorizontalAlignment="Left" Margin="48,34,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="connectPortBtn" Content="Connect" HorizontalAlignment="Left" Margin="282,37,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.125,1.204" PreviewMouseLeftButtonDown="connectPortBtn_PreviewMouseLeftButtonDown" PreviewMouseLeftButtonUp="connectPortBtn_PreviewMouseLeftButtonUp"   />
-        <CheckBox x:Name="led13CheckBox" Content="LED13" HorizontalAlignment="Left" Margin="124,102,0,0" VerticalAlignment="Top"  Checked="led13CheckBox_Checked" Unchecked="led13CheckBox_Unchecked"/>
-        <Button x:Name="DeadZoneP" Content="+" HorizontalAlignment="Left" Margin="369,1,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="DeadZoneP_Click" Grid.Row="1"/>
-        <Button x:Name="DeadZoneN" Content="-" HorizontalAlignment="Left" Margin="346,1,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="DeadZoneN_Click" Grid.Row="1"/>
-        <Label x:Name="DeadZoneLablel" Content="DeadZone=" HorizontalAlignment="Left" Margin="227,242,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Grid.RowSpan="2"/>
-        <Label x:Name="ClipInputLabel" Content="ClipInput=" HorizontalAlignment="Left" Margin="227,24,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Grid.Row="1"/>
-        <Button x:Name="ClipInputP" Content="+" HorizontalAlignment="Left" Margin="369,27,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="ClipInputP_Click" Grid.Row="1"/>
-        <Button x:Name="ClipInputN" Content="-" HorizontalAlignment="Left" Margin="346,27,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="ClipInputN_Click" Grid.Row="1"/>
-        <ComboBox x:Name="comboxMotor" HorizontalAlignment="Left" Margin="124,63,0,0" VerticalAlignment="Top" Width="120"
+        <ComboBox x:Name="comboxSelectPort" HorizontalAlignment="Left" Margin="91,20,0,0" VerticalAlignment="Top" Width="120" Height="22"/>
+        <Label x:Name="selPortLabel" Content="Select Port:" HorizontalAlignment="Left" Margin="8,16,0,0" VerticalAlignment="Top" Width="82" Height="26"/>
+        <Button x:Name="connectPortBtn" Content="Connect" HorizontalAlignment="Left" Margin="252,32,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.125,1.204" PreviewMouseLeftButtonDown="connectPortBtn_PreviewMouseLeftButtonDown" PreviewMouseLeftButtonUp="connectPortBtn_PreviewMouseLeftButtonUp" Height="20" Width="48"   />
+        <Button x:Name="DeadZoneP" Content="+" HorizontalAlignment="Left" Margin="358,252,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="DeadZoneP_Click"/>
+        <Button x:Name="DeadZoneN" Content="-" HorizontalAlignment="Left" Margin="335,252,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="DeadZoneN_Click"/>
+        <Label x:Name="DeadZoneLablel" Content="DeadZone=" HorizontalAlignment="Left" Margin="227,242,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Height="26" Width="73"/>
+        <Label x:Name="ClipInputLabel" Content="ClipInput=" HorizontalAlignment="Left" Margin="227,269,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Height="26" Width="66"/>
+        <Button x:Name="ClipInputP" Content="+" HorizontalAlignment="Left" Margin="358,278,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="ClipInputP_Click"/>
+        <Button x:Name="ClipInputN" Content="-" HorizontalAlignment="Left" Margin="335,278,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="ClipInputN_Click"/>
+        <ComboBox x:Name="comboxMotor" HorizontalAlignment="Left" Margin="91,47,0,0" VerticalAlignment="Top" Width="120"
                 SelectionChanged="selectOption_SelectionChanged" 
                 SelectedValue="{Binding VMselectedOption, Mode=TwoWay}" 
-                SelectedValuePath="Content"
+                SelectedValuePath="Content" Height="22"
                  >
             <ComboBoxItem Name="one" >1</ComboBoxItem>
             <ComboBoxItem Name="two">2</ComboBoxItem>
             <ComboBoxItem Name="off">OFF</ComboBoxItem>
         </ComboBox>
 
-        <Label x:Name="MotorLabel" Content="Motor" HorizontalAlignment="Left" Margin="50,59,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="MaxLimitLabel" Content="MaxLimit=" HorizontalAlignment="Left" Margin="227,50,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Grid.Row="1"/>
-        <Button x:Name="MaxLimitP" Content="+" HorizontalAlignment="Left" Margin="369,53,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="MaxLimitP_Click" Grid.Row="1"/>
-        <Button x:Name="MaxLimitN" Content="-" HorizontalAlignment="Left" Margin="346,53,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="MaxLimitN_Click" Grid.Row="1"/>
-        <Label x:Name="DeadZoneValue" Content="0" HorizontalAlignment="Left" Margin="306,242,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="29" Grid.RowSpan="2"/>
-        <Label x:Name="ClipInputValue" Content="0" HorizontalAlignment="Left" Margin="306,24,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="29" Grid.Row="1"/>
-        <Label x:Name="MaxLimitValue" Content="0" HorizontalAlignment="Left" Margin="306,50,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="29" Grid.Row="1"/>
-        <Button x:Name="PWMrevP" Content="+" HorizontalAlignment="Left" Margin="369,212,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="PWMrevP_Click" />
-        <Button x:Name="PWMrevN" Content="-" HorizontalAlignment="Left" Margin="346,212,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="PWMrevN_Click" />
-        <Label x:Name="PWMrevLabel" Content="PWMrev" HorizontalAlignment="Left" Margin="227,208,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
-        <Label x:Name="PWMrevValue" Content="0" HorizontalAlignment="Left" Margin="306,208,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="29"/>
-        <Button x:Name="PWMmaxP" Content="+" HorizontalAlignment="Left" Margin="369,181,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="PWMmaxP_Click" />
-        <Button x:Name="PWMmaxN" Content="-" HorizontalAlignment="Left" Margin="346,181,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="PWMmaxN_Click" />
-        <Label x:Name="PWMmaxLabel" Content="PWMmax" HorizontalAlignment="Left" Margin="227,178,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
-        <Label x:Name="PWMmaxValue" Content="0" HorizontalAlignment="Left" Margin="306,178,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="29"/>
-        <Button x:Name="PWMminP" Content="+" HorizontalAlignment="Left" Margin="369,155,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="PWMminP_Click" />
-        <Button x:Name="PWMminN" Content="-" HorizontalAlignment="Left" Margin="346,155,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="PWMminN_Click" />
-        <Label x:Name="PWMminLabel" Content="PWMmin" HorizontalAlignment="Left" Margin="227,152,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
-        <Label x:Name="PWMminValue" Content="0" HorizontalAlignment="Left" Margin="306,152,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="29"/>
-        <Button x:Name="FpwmP" Content="+" HorizontalAlignment="Left" Margin="369,129,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
-        <Button x:Name="FpwmN" Content="-" HorizontalAlignment="Left" Margin="346,129,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
-        <Label x:Name="FpwmLabel" Content="Fpwm" HorizontalAlignment="Left" Margin="227,126,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
-        <Label x:Name="FpwmValue" Content="0" HorizontalAlignment="Left" Margin="306,126,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="29"/>
+        <Label x:Name="MotorLabel" Content="Motor" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top" Height="26" Width="43"/>
+        <Label x:Name="MaxLimitLabel" Content="MaxLimit=" HorizontalAlignment="Left" Margin="227,296,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Height="26" Width="66"/>
+        <Button x:Name="MaxLimitP" Content="+" HorizontalAlignment="Left" Margin="358,304,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="MaxLimitP_Click"/>
+        <Button x:Name="MaxLimitN" Content="-" HorizontalAlignment="Left" Margin="335,304,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="MaxLimitN_Click"/>
+        <Label x:Name="DeadZoneValue" Content="0" HorizontalAlignment="Left" Margin="306,242,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="29" Height="26"/>
+        <Label x:Name="ClipInputValue" Content="0" HorizontalAlignment="Left" Margin="306,270,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="29" Height="26"/>
+        <Label x:Name="MaxLimitValue" Content="0" HorizontalAlignment="Left" Margin="306,296,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="29" Height="26"/>
+        <Button x:Name="PWMrevP" Content="+" HorizontalAlignment="Left" Margin="358,217,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="PWMrevP_Click" />
+        <Button x:Name="PWMrevN" Content="-" HorizontalAlignment="Left" Margin="335,217,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="PWMrevN_Click" />
+        <Label x:Name="PWMrevLabel" Content="PWMrev" HorizontalAlignment="Left" Margin="227,208,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Height="26" Width="55"/>
+        <Label x:Name="PWMrevValue" Content="0" HorizontalAlignment="Left" Margin="306,208,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="29" Height="26"/>
+        <Button x:Name="PWMmaxP" Content="+" HorizontalAlignment="Left" Margin="358,186,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="PWMmaxP_Click" />
+        <Button x:Name="PWMmaxN" Content="-" HorizontalAlignment="Left" Margin="335,186,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="PWMmaxN_Click" />
+        <Label x:Name="PWMmaxLabel" Content="PWMmax" HorizontalAlignment="Left" Margin="227,178,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Height="26" Width="61"/>
+        <Label x:Name="PWMmaxValue" Content="0" HorizontalAlignment="Left" Margin="306,178,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="29" Height="26"/>
+        <Button x:Name="PWMminP" Content="+" HorizontalAlignment="Left" Margin="358,160,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="PWMminP_Click" />
+        <Button x:Name="PWMminN" Content="-" HorizontalAlignment="Left" Margin="335,160,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="PWMminN_Click" />
+        <Label x:Name="PWMminLabel" Content="PWMmin" HorizontalAlignment="Left" Margin="227,152,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Height="26" Width="59"/>
+        <Label x:Name="PWMminValue" Content="0" HorizontalAlignment="Left" Margin="306,152,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="29" Height="26"/>
+        <Button x:Name="FpwmP" Content="+" HorizontalAlignment="Left" Margin="358,134,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
+        <Button x:Name="FpwmN" Content="-" HorizontalAlignment="Left" Margin="335,134,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
+        <Label x:Name="FpwmLabel" Content="Fpwm" HorizontalAlignment="Left" Margin="227,126,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Height="26" Width="42"/>
+        <Label x:Name="FpwmValue" Content="0" HorizontalAlignment="Left" Margin="306,126,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="29" Height="26"/>
         <Button x:Name="FpidP" Content="+" HorizontalAlignment="Left" Margin="161,188,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
         <Button x:Name="FpidN" Content="-" HorizontalAlignment="Left" Margin="137,188,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" />
-        <Label x:Name="FpidLabel" Content="Fpid/" HorizontalAlignment="Left" Margin="61,186,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
-        <Label x:Name="FpidValue" Content="1" HorizontalAlignment="Left" Margin="87,186,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="30"/>
+        <Label x:Name="FpidLabel" Content="Fpid/" HorizontalAlignment="Left" Margin="61,186,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Height="26" Width="38"/>
+        <Label x:Name="FpidValue" Content="1" HorizontalAlignment="Left" Margin="87,186,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="30" Height="26"/>
         <Button x:Name="KpP" Content="+" HorizontalAlignment="Left" Margin="161,214,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KpP_Click" />
         <Button x:Name="KpN" Content="-" HorizontalAlignment="Left" Margin="137,214,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KpN_Click" />
-        <Label x:Name="KpLabel" Content="Kp=" HorizontalAlignment="Left" Margin="50,212,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578"/>
-        <Label x:Name="KpValue" Content="0" HorizontalAlignment="Left" Margin="87,212,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="45"/>
-        <Button x:Name="KiP" Content="+" HorizontalAlignment="Left" Margin="161,243,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KiP_Click" Grid.RowSpan="2" />
-        <Button x:Name="KiN" Content="-" HorizontalAlignment="Left" Margin="137,243,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KiN_Click" Grid.RowSpan="2" />
-        <Label x:Name="KiLabel" Content="Ki=" HorizontalAlignment="Left" Margin="51,241,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Grid.RowSpan="2"/>
-        <Label x:Name="KiValue" Content="0" HorizontalAlignment="Left" Margin="87,241,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="45" Grid.RowSpan="2"/>
-        <Button x:Name="KdP" Content="+" HorizontalAlignment="Left" Margin="161,23,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KdP_Click" Grid.Row="1" />
-        <Button x:Name="KdN" Content="-" HorizontalAlignment="Left" Margin="137,23,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KdN_Click" Grid.Row="1" />
-        <Label x:Name="KdLabel" Content="Kd=" HorizontalAlignment="Left" Margin="50,20,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Grid.Row="1"/>
-        <Label x:Name="KdValue" Content="0" HorizontalAlignment="Left" Margin="87,20,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="45" Grid.Row="1"/>
-        <Button x:Name="KsP" Content="+" HorizontalAlignment="Left" Margin="161,48,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KsP_Click" Grid.Row="1" />
-        <Button x:Name="KsN" Content="-" HorizontalAlignment="Left" Margin="137,48,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KsN_Click" Grid.Row="1" />
-        <Label x:Name="KsLabel" Content="Ks=" HorizontalAlignment="Left" Margin="51,46,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Grid.Row="1"/>
-        <Label x:Name="KsValue" Content="0" HorizontalAlignment="Left" Margin="87,46,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="45" Grid.Row="1"/>
-        <Button x:Name="StepP" Content="+" HorizontalAlignment="Left" Margin="160,138,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="46" Height="33" Click="StepP_Click" />
+        <Label x:Name="KpLabel" Content="Kp=" HorizontalAlignment="Left" Margin="50,212,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Height="26" Width="32"/>
+        <Label x:Name="KpValue" Content="0" HorizontalAlignment="Left" Margin="87,212,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="45" Height="26"/>
+        <Button x:Name="KiP" Content="+" HorizontalAlignment="Left" Margin="161,243,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KiP_Click" />
+        <Button x:Name="KiN" Content="-" HorizontalAlignment="Left" Margin="137,243,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KiN_Click" />
+        <Label x:Name="KiLabel" Content="Ki=" HorizontalAlignment="Left" Margin="51,241,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Height="26" Width="28"/>
+        <Label x:Name="KiValue" Content="0" HorizontalAlignment="Left" Margin="87,241,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="45" Height="26"/>
+        <Button x:Name="KdP" Content="+" HorizontalAlignment="Left" Margin="161,269,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KdP_Click" />
+        <Button x:Name="KdN" Content="-" HorizontalAlignment="Left" Margin="137,269,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KdN_Click" />
+        <Label x:Name="KdLabel" Content="Kd=" HorizontalAlignment="Left" Margin="50,266,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Height="26" Width="32"/>
+        <Label x:Name="KdValue" Content="0" HorizontalAlignment="Left" Margin="87,266,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="45" Height="26"/>
+        <Button x:Name="KsP" Content="+" HorizontalAlignment="Left" Margin="161,294,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KsP_Click" />
+        <Button x:Name="KsN" Content="-" HorizontalAlignment="Left" Margin="137,294,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="18" Height="19" Click="KsN_Click" />
+        <Label x:Name="KsLabel" Content="Ks=" HorizontalAlignment="Left" Margin="51,292,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Height="26" Width="30"/>
+        <Label x:Name="KsValue" Content="0" HorizontalAlignment="Left" Margin="87,292,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="45" Height="26"/>
+        <Button x:Name="StepP" Content="+" HorizontalAlignment="Left" Margin="161,139,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="46" Height="33" Click="StepP_Click" />
         <Button x:Name="StepN" Content="-" HorizontalAlignment="Left" Margin="79,138,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.599,-2.703" Width="43" Height="33" Click="StepN_Click" />
-        <Label x:Name="StepLabel" Content="Step" HorizontalAlignment="Left" Margin="25,134,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" FontSize="20"/>
-        <Label x:Name="StepValue" Content="1" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="122,136,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="33" FontSize="20"/>
+        <Label x:Name="StepLabel" Content="Step" HorizontalAlignment="Left" Margin="25,134,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" FontSize="20" Height="37" Width="49"/>
+        <Label x:Name="StepValue" Content="1" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="122,136,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.211,-1.578" Width="33" FontSize="20" Height="37"/>
         <ProgressBar x:Name="TargetBarValue" 
-                     HorizontalAlignment="Left" 
-                     Height="23" Margin="61,156,0,0" 
+                     HorizontalAlignment="Center" 
+                     Height="23" Margin="0,394,0,0" 
                      VerticalAlignment="Top" 
                      
                      Width="326"
                      Minimum="0"
                      Maximum="1024"
-                     Value="0" Grid.Row="1"/>
+                     Value="0"/>
         <TextBlock x:Name="TargetTextValue"
             Text="{Binding ElementName=TargetBarValue, Path=Value, StringFormat={}{0:0}}" 
-            HorizontalAlignment="Left" 
-            VerticalAlignment="Top" RenderTransformOrigin="17.502,-0.157" Margin="221,160,0,0" Grid.Row="1" />
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Top" RenderTransformOrigin="17.502,-0.157" Margin="0,399,0,0" Height="16" Width="36" />
         <ProgressBar x:Name="FeedBackBarValue" 
-                     HorizontalAlignment="Left" 
-                     Height="26" Margin="61,102,0,0" 
+                     HorizontalAlignment="Center" 
+                     Height="26" Margin="0,340,0,0" 
                      VerticalAlignment="Top" 
                      
                      Width="326"
                      Minimum="0"
                      Maximum="1024"
-                     Value="0" Grid.Row="1"/>
+                     Value="0"/>
         <TextBlock x:Name="FeedBackTextValue"
             Text="{Binding ElementName=FeedBackBarValue, Path=Value, StringFormat={}{0:0}}" 
-            HorizontalAlignment="Left" 
-            VerticalAlignment="Top" RenderTransformOrigin="17.502,-0.157" Margin="221,102,0,0" Grid.Row="1" />
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Top" RenderTransformOrigin="17.502,-0.157" Margin="0,345,0,0" Height="16" Width="35" />
         <Slider x:Name="TargetSlider" 
-                HorizontalAlignment="Left" 
-                Margin="48,133,0,0" 
+                HorizontalAlignment="Center" 
+                Margin="0,371,0,0" 
                 VerticalAlignment="Top" 
                 Width="352"
-                Maximum="1024" ValueChanged="Slider_ValueChanged" Height="23" Grid.Row="1"/>
+                Maximum="1024" ValueChanged="Slider_ValueChanged" Height="23"/>
 
     </Grid>
 </Window>

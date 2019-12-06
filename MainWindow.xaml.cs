@@ -289,7 +289,7 @@ namespace vr6Motion
 
                 //string selectedPort = comboxSelectPort.SelectedItem.ToString();
 
-                port = new SerialPort("COM7", 19200, Parity.None, 8, StopBits.One);
+                port = new SerialPort("COM14", 19200, Parity.None, 8, StopBits.One);
                 port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
                 port.Encoding = Encoding.GetEncoding(28591);
                 port.Open();
@@ -314,6 +314,8 @@ namespace vr6Motion
             comboxSelectPort.IsEnabled = true;
             connectPortBtn.Content = "Connect";
             port.Write("[mo0]");
+            sendOneVal("A", 350);
+            sendOneVal("B", 350);
             port.Close();
 
 
@@ -546,7 +548,7 @@ namespace vr6Motion
         private void selectOption_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string val = comboxMotor.SelectedValue.ToString();
-            TargetSlider.Value = 512;
+            TargetSlider.Value = 350;
             if (val == "1")
             {
 

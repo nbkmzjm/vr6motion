@@ -451,11 +451,11 @@ else
 }
 //  
   
-//    mySerial.begin(19200);
-//    mySerial.listen();
-//    K1.start();
-//    K1.units(10, 250);
-//    K1.home();
+   mySerial.begin(19200);
+   mySerial.listen();
+   K1.start();
+   K1.units(10, 250);
+   K1.home();
    
 //  if (digitalRead(11) == HIGH){
 ////    ST[0].setTimeout(100);
@@ -1542,58 +1542,43 @@ void SetOutputsMotor3()   // MODE2
 
 void SetOutputsMotor1()     // MODE3
 {
-//    if((Feedback1 > InputClipMax1) && (PWMrev1 != 0))
-//    {
-//        Serial.println("aaaaaaaaaaaa");  
-//        PWMout1 = PWMrev1;
-////        ST[0].motor(1,(constrain((PWMout1/2),-127,127)));    
-//    }
-//    else if((Feedback1<InputClipMin1) && (PWMrev1 != 0))
-//    {
-//        Serial.println("bbbbbbbbbbbbbbbbbbbbbbbbb");  
-//        PWMout1 = PWMrev1;
-////        ST[0].motor(1,(constrain(0-(PWMout1/2),-127,127)));    
-//    }  
-//    else if((Target1 > (Feedback1 + DeadZone1)) || (Target1 < (Feedback1 - DeadZone1)))
-//    {
+   if((Feedback1 > InputClipMax1) && (PWMrev1 != 0))
+   {
+       PWMout1 = PWMrev1;
+       K1.s(-(constrain((PWMout1*2),-500,500)));
+   }
+   else if((Feedback1<InputClipMin1) && (PWMrev1 != 0))
+   {
+       PWMout1 = PWMrev1;
+       K1.s((constrain((PWMout1*2),-500,500)));
+   }  
+   else if((Target1 > (Feedback1 + DeadZone1)) || (Target1 < (Feedback1 - DeadZone1)))
+   {
         if (PWMout1 >= 0)  
         {     
-//            Serial.println("FFFFFFFFFFFFFFFFFFFFFFFF");                         
-            // Drive Motor Forward 
             PWMout1+=PWMoffset1;
             if(PWMout1 > (PWMmax1+LiftFactor1)){PWMout1=PWMmax1+LiftFactor1;}
-//            ST[0].motor(1,(constrain(0-(PWMout1/2),-127,127)));   
-//           PWMout1 = map(PWMout1, -255, 255, -500, 500);
             K1.s((constrain((PWMout1*2),-500,500)));
-//            K1.s(-PWMout1);
         }  
         else 
         {                            
-//            Serial.println("BBBBBBBBBBBBBBBBBBBBBBBBBBB");                   
-            // Drive Motor Backwards 
             PWMout1 = abs(PWMout1);
             PWMout1+=PWMoffset1;
             if(PWMout1 > PWMmax1){PWMout1=PWMmax1;}
-//            ST[0].motor(1,(constrain((PWMout1/2),-127,127))); 
-//            K1.s(constrain(0-(PWMout1*2),-300,300)); 
-//            PWMout1 = map(PWMout1, -255, 255, -500, 500);
             K1.s(-(constrain((PWMout1*2),-500,500)));
-//            K1.s(-PWMout1);  
         }
-//    }
-//    else
-//    {
-//        // Brake Motor 
-//        Serial.println("cccccccccccccccccccccccccc");  
-//        PWMout1=PWMoffset1;
-////        ST[0].motor(1,0);
-//        K1.s(0);   
-//    }
+   }
+   else
+   {
+       // Brake Motor 
+       PWMout1=PWMoffset1;
+       K1.s(0);   
+   }
 }
 
 
-//void SetOutputsMotor2()       // MODE3
-//{
+// void SetOutputsMotor2()       // MODE3
+// {
 //    if((Feedback2 > InputClipMax2) && (PWMrev2 != 0))
 //    {
 //        PWMout2 = PWMrev2;
@@ -1628,7 +1613,7 @@ void SetOutputsMotor1()     // MODE3
 //        PWMout2=PWMoffset2;
 //        ST[0].motor(2,0);    
 //    }
-//}
+// }
 
 
 // void SetOutputsMotor3()       // MODE3
@@ -1867,38 +1852,38 @@ void TogglePin()
 void loop()
 {
 
-//    limitUpState1 = digitalRead(limitUp1);
-//    limitDownState1 = digitalRead(limitDown1);
-//    Feedback1 = K1.getP().value();
+   limitUpState1 = digitalRead(limitUp1);
+   limitDownState1 = digitalRead(limitDown1);
+   Feedback1 = K1.getP().value();
  
-//    digitalWrite(ledPin, HIGH);
-//    while (limitUpState1 == LOW)
-//    {
-//          K1.s(100);
-//          Feedback1 = K1.getP().value();
-// //          Serial.print("do up..");
-// //          Serial.println(Feedback1);
+   digitalWrite(ledPin, HIGH);
+   while (limitUpState1 == LOW)
+   {
+         K1.s(100);
+         Feedback1 = K1.getP().value();
+//          Serial.print("do up..");
+//          Serial.println(Feedback1);
          
-//          limitUpState1 = digitalRead(limitUp1);
-//   };
+         limitUpState1 = digitalRead(limitUp1);
+  };
 
-//    while (limitDownState1 == LOW)
-//    {
-//        K1.s(-100);
-//        Feedback1 = K1.getP().value();
-// //        Serial.print("do down..");
-// //        Serial.println(Feedback1);
+   while (limitDownState1 == LOW)
+   {
+       K1.s(-100);
+       Feedback1 = K1.getP().value();
+//        Serial.print("do down..");
+//        Serial.println(Feedback1);
       
-//        limitDownState1 = digitalRead(limitDown1);
-//   };
+       limitDownState1 = digitalRead(limitDown1);
+  };
 
-//   K1.home();
-//   while(Feedback1<300){
-//        Feedback1 = K1.getP().value();
-// //        Serial.print("centering..");
-// //        Serial.println(Feedback1);
-//        K1.s(100);
-//   }
+  K1.home();
+  while(Feedback1<300){
+       Feedback1 = K1.getP().value();
+//        Serial.print("centering..");
+//        Serial.println(Feedback1);
+       K1.s(100);
+  }
      //Read all stored Parameters from EEPROM
 
     ReadEEProm();
@@ -1975,87 +1960,57 @@ void loop()
         TogglePin();                      // Used for testing to monitor PID timing on Oscilloscope
 
         PIDProcessCounter++;
-//ppp
         if (PIDProcessCounter >= PIDProcessDivider)
         {
-//         PIDProcessCounter=0;
+        PIDProcessCounter=0;
               
               
-//             //   Target = analogRead(targetPot);
-// //              Serial.print("targetPot.................: ");
-// //              Serial.print(Target);
-//               limitUpState1 = digitalRead(limitUp1);
-//               limitDownState1 = digitalRead(limitDown1);
+              limitUpState1 = digitalRead(limitUp1);
+              limitDownState1 = digitalRead(limitDown1);
 
-//              digitalWrite(ledPin, LOW);
-//              Feedback1 = K1.getP().value();
-// //             Serial.print("Ready..");
-// //             Serial.println(Feedback1);
+             digitalWrite(ledPin, LOW);
+             Feedback1 = K1.getP().value();
 
+            if(Feedback1 < -10 || Feedback1 > 700 ){
+              digitalWrite(ledPin, HIGH);
+              K1.s(0);
+           }else if (Feedback1 - PreFeedback1 > 100){
+//              Serial.print(Feedback1);
+//              Serial.print("--");
+//              Serial.println(Feedback1 - PreFeedback1);
+             digitalWrite(ledPin, HIGH);
               
-            
-
-//             if(Feedback1 < -10 || Feedback1 > 700 ){
-//               digitalWrite(ledPin, HIGH);
-//               K1.s(0);
-// //            }else if (Feedback1 - PreFeedback1 > 100){
-// ////              Serial.print(Feedback1);
-// ////              Serial.print("--");
-// ////              Serial.println(Feedback1 - PreFeedback1);
-// //              digitalWrite(ledPin, HIGH);
-// //              ST[0].motor(1,0);
-// //              ST[0].motor(1,0);
-              
-//             }else{ 
+            }else{ 
              
 
-// //              ST[0].setTimeout(500);
-//               if (limitUpState1 == HIGH) {
+//              ST[0].setTimeout(500);
+              if (limitUpState1 == HIGH) {
                 
-// //                  if(currentMillis - previousMillis > 300){
-// //                    digitalWrite(ledPin, HIGH);
-// //                    K1.s(0);
-// //                  }else{
-//                     K1.s(-100);
-// //                  }
+                 if(currentMillis - previousMillis > 300){
+                   digitalWrite(ledPin, HIGH);
+                   K1.s(0);
+                 }else{
+                    K1.s(-100);
+                 }
                
-//               }else if(limitDownState1 == HIGH){
-// //                  if(currentMillis - previousMillis > 300){
-// //                    digitalWrite(ledPin, HIGH);
-// //                    K1.s(0);
-// //                  }else{
-//                     K1.s(100);
-// //                  }
-//               } else {
-//                   digitalWrite(ledPin, LOW);
-//                   Feedback1 = K1.getP().value();
-//                 //   Target = analogRead(targetPot);
-// //                  Serial.print("targetPot.................: ");
-// //                  Serial.print(Target);
+              }else if(limitDownState1 == HIGH){
+                 if(currentMillis - previousMillis > 300){
+                   digitalWrite(ledPin, HIGH);
+                   K1.s(0);
+                 }else{
+                    K1.s(100);
+                 }
+              } else {
+                  digitalWrite(ledPin, LOW);
+                  Feedback1 = K1.getP().value();
                     
-//                   PWMout1=CalcMotor1PID(Target1,Feedback1);
-// //                  Serial.print("PWM.................: ");
-// //                  Serial.print(PWMout1);
-//                   SetOutputsMotor1();
-// //                  Feedback1 = map(encoderCounter1, -25000, 25000, 0, 1023);
+                  PWMout1=CalcMotor1PID(Target1,Feedback1);
+                  SetOutputsMotor1();
               
-// //                  deltaPos = abs(Feedback1 - Target);
-// ////                  accumDeltaPos += deltaPos;
-// //                  if(deltaPos > 50){
-// //                    motorOut1 = 250;
 
-// //                  }else{
-// //                    motorOut1 = map(deltaPos, 0, 50,0, 250);
-// //                  }
-// //                  
-// //                  if(Feedback1 - Target > 0){
-// //                    motorOut1 = -motorOut1;
-// //                  }    
-// //                  K1.s(motorOut1);
-//                   previousMillis = currentMillis;
-// //              }
-//             }
-//           }   
+                  previousMillis = currentMillis;
+            }
+          }   
           
         }
 
