@@ -115,6 +115,7 @@
                 Width="352"
                 Maximum="1024" ValueChanged="Slider_ValueChanged" Height="23"/>
         <Button x:Name="MotorOff" Content="OFF" HorizontalAlignment="Left" Margin="186,48,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.125,1.204"   Height="20" Width="36" Click="MotorOff_Click"  />
+        <Button x:Name="ActivateSlider" Content="Move" HorizontalAlignment="Left" Margin="388,340,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.125,1.204"   Height="20" Width="36" Click="ActivateSlider_Click"   />
 
     </Grid>
 </Window>

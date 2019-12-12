@@ -45,6 +45,7 @@ namespace vr6Motion
         int Target = 0;
 
         System.Timers.Timer aTimer = new System.Timers.Timer();
+        System.Timers.Timer rndTimer = new System.Timers.Timer();
 
 
 
@@ -177,10 +178,7 @@ namespace vr6Motion
             enabledControls(false);
             comboxMotor.IsEnabled = false;
             MotorOff.IsEnabled = false;
-            foreach (string port in ports)
-            {
-                comboxSelectPort.Items.Add(port);
-            }
+           
 
 
         }
@@ -194,11 +192,17 @@ namespace vr6Motion
                 MessageBox.Show("Please check devive USB connection!!");
                 this.Close();
             }
+
+            foreach (string port in ports)
+            {
+                comboxSelectPort.Items.Add(port);
+            }
+        }
+        private void connectPortBtn_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ConnectToArdu();
         }
 
-        private void connectPort_Click(object sender, RoutedEventArgs e)
-        {
-        }
         private delegate void UpdateUiTextDelegate(char[] data);
 
         private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
@@ -322,6 +326,10 @@ namespace vr6Motion
                 //port.Write("START\n");
                 aTimer.Elapsed += new ElapsedEventHandler(saveParam);
                 aTimer.Interval = 3000;
+
+                rndTimer.Elapsed += new ElapsedEventHandler(generateNumber);
+                rndTimer.Interval = 500;
+
                 connectPortBtn.Content = "Disconnect";
                 comboxSelectPort.IsEnabled = false;
                 
@@ -329,6 +337,7 @@ namespace vr6Motion
             else
             {
                 DisconnectToArdu();
+                this.Close();
             }
         }
 
@@ -344,7 +353,7 @@ namespace vr6Motion
             port.Write("[mo0]");
             sendOneVal("A", 350);
             sendOneVal("B", 350);
-            this.Close();
+            
 
 
         }
@@ -409,6 +418,7 @@ namespace vr6Motion
             PWMminP.IsEnabled = state;
             PWMminN.IsEnabled = state;
             TargetSlider.IsEnabled = state;
+            ActivateSlider.IsEnabled = state;
 
 
 
@@ -545,15 +555,8 @@ namespace vr6Motion
 
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
 
-        }
-
-        private void connectPortBtn_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            ConnectToArdu();
-        }
+        
 
         
 
@@ -737,6 +740,60 @@ namespace vr6Motion
             port.Write("[mo0]");
             enabledControls(false);
             comboxMotor.Text = "OFF";
+            
+            rndTimer.Stop();
+            ActivateSlider.Content = "Move";
+        }
+
+        private void ActivateSlider_Click(object sender, RoutedEventArgs e)
+        {
+
+            
+            if (rndTimer.Enabled == true)
+            {
+                rndTimer.Stop();
+                ActivateSlider.Content = "Move";
+
+            }
+            else
+            {
+                rndTimer.Start();
+                ActivateSlider.Content = "Stop";
+            }
+            
+
+        }
+        private delegate void UpdateTextHandler(int updatedNumber);
+        private void generateNumber(object source, ElapsedEventArgs e)
+        {
+            Random rnd = new Random();
+            int number = rnd.Next(200, 600);
+            Debug.WriteLine(number);
+
+            Dispatcher.Invoke(DispatcherPriority.Send, new UpdateTextHandler(update_textBox), number);
+
+
+            
+
+        }
+
+        void update_textBox(int updatedNumber)
+
+        {
+
+            TargetSlider.Value = updatedNumber;
+            string val = comboxMotor.SelectedValue.ToString();
+            if (val == "1")
+            {
+                sendOneVal("A", updatedNumber);
+                port.Write("[rdA]");
+            }
+            else if (val == "2")
+            {
+                sendOneVal("B", updatedNumber);
+                port.Write("[rdB]");
+            }
+
         }
     }
 }
