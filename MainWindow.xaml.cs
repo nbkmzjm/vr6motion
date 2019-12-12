@@ -52,20 +52,20 @@ namespace vr6Motion
         private void SerialDataProcess(char[] data)
         {
 
-            Debug.Write("0: ");
-            Debug.Write(data[0]);
-            Debug.Write("=");
-            Debug.WriteLine((int)data[0]);
-            Debug.Write("1: ");
-            Debug.Write(data[1]);
-            Debug.Write("=");
-            Debug.WriteLine((int)data[1]);
-            Debug.Write("2: ");
-            Debug.Write(data[2]);
-            Debug.Write("=");
-            Debug.WriteLine((int)data[2]);
+            //Debug.Write("0: ");
+            //Debug.Write(data[0]);
+            //Debug.Write("=");
+            //Debug.WriteLine((int)data[0]);
+            //Debug.Write("1: ");
+            //Debug.Write(data[1]);
+            //Debug.Write("=");
+            //Debug.WriteLine((int)data[1]);
+            //Debug.Write("2: ");
+            //Debug.Write(data[2]);
+            //Debug.Write("=");
+            //Debug.WriteLine((int)data[2]);
 
-            Debug.WriteLine("=====");
+            //Debug.WriteLine("=====");
 
 
             //byte[] bytes = Encoding.ASCII.GetBytes(data);
@@ -215,7 +215,6 @@ namespace vr6Motion
             //Debug.Print("data:-----------");
             //Debug.Print(data);
             Debug.WriteLine("data:-----------");
-            Debug.WriteLine(port.IsOpen);
             int i = sp.BytesToRead;
             Debug.WriteLine(i);
             Debug.WriteLine("---");
@@ -311,7 +310,7 @@ namespace vr6Motion
 
                 //string selectedPort = comboxSelectPort.SelectedItem.ToString();
 
-                port = new SerialPort("COM7", 19200, Parity.None, 8, StopBits.One);
+                port = new SerialPort("COM14", 19200, Parity.None, 8, StopBits.One);
                 port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
                 port.Encoding = Encoding.GetEncoding(28591);
                 
@@ -328,7 +327,7 @@ namespace vr6Motion
                 aTimer.Interval = 3000;
 
                 rndTimer.Elapsed += new ElapsedEventHandler(generateNumber);
-                rndTimer.Interval = 500;
+                rndTimer.Interval = 300;
 
                 connectPortBtn.Content = "Disconnect";
                 comboxSelectPort.IsEnabled = false;
@@ -767,7 +766,7 @@ namespace vr6Motion
         private void generateNumber(object source, ElapsedEventArgs e)
         {
             Random rnd = new Random();
-            int number = rnd.Next(200, 600);
+            int number = rnd.Next(200, 500);
             Debug.WriteLine(number);
 
             Dispatcher.Invoke(DispatcherPriority.Send, new UpdateTextHandler(update_textBox), number);

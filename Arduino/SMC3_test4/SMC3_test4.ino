@@ -109,7 +109,7 @@ unsigned long TimesUp=0;           // Counter used to see if it's time to calcul
 
 long Feedback1 = 512;
 int Feedback2 = 512;
-int PreFeedback2 = 512;
+int PreFeedback1 = 512;
 int Feedback3 = 512;
 
 int Target1 = 300;
@@ -449,13 +449,13 @@ else
 {
   Serial.begin(115200);
 }
-//  
+ 
   
-//    mySerial.begin(19200);
-//    mySerial.listen();
-//    K1.start();
-//    K1.units(10, 250);
-//    K1.home();
+   mySerial.begin(19200);
+   mySerial.listen();
+   K1.start();
+   K1.units(10, 250);
+   K1.home();
    
 //  if (digitalRead(11) == HIGH){
 ////    ST[0].setTimeout(100);
@@ -971,6 +971,12 @@ void ParseCommand(int ComPort)
             // Serial.write("-");
             // Serial.write(RxBuffer[2][ComPort]);
             // Serial.write("}");
+            // int num = 64;
+            // Serial.print("{");
+            // Serial.print(String(RxBuffer[1][ComPort]*256));
+            // Serial.print("-");
+            // Serial.print(String(RxBuffer[2][ComPort]*256));
+            // Serial.print("}");
             
             break;
         case 'E':
@@ -1852,38 +1858,38 @@ void TogglePin()
 void loop()
 {
 
-//    limitUpState1 = digitalRead(limitUp1);
-//    limitDownState1 = digitalRead(limitDown1);
-//    Feedback1 = K1.getP().value();
+   limitUpState1 = digitalRead(limitUp1);
+   limitDownState1 = digitalRead(limitDown1);
+   Feedback1 = K1.getP().value();
  
-//    digitalWrite(ledPin, HIGH);
-//    while (limitUpState1 == LOW)
-//    {
-//          K1.s(100);
-//          Feedback1 = K1.getP().value();
-// //          Serial.print("do up..");
-// //          Serial.println(Feedback1);
+   digitalWrite(ledPin, HIGH);
+   while (limitUpState1 == LOW)
+   {
+         K1.s(100);
+         Feedback1 = K1.getP().value();
+        //  Serial.write("{do up.}");
+//          Serial.println(Feedback1);
          
-//          limitUpState1 = digitalRead(limitUp1);
-//   };
+         limitUpState1 = digitalRead(limitUp1);
+  };
 
-//    while (limitDownState1 == LOW)
-//    {
-//        K1.s(-100);
-//        Feedback1 = K1.getP().value();
-// //        Serial.print("do down..");
-// //        Serial.println(Feedback1);
+   while (limitDownState1 == LOW)
+   {
+       K1.s(-100);
+       Feedback1 = K1.getP().value();
+//        Serial.print("do down..");
+//        Serial.println(Feedback1);
       
-//        limitDownState1 = digitalRead(limitDown1);
-//   };
+       limitDownState1 = digitalRead(limitDown1);
+  };
 
-//   K1.home();
-//   while(Feedback1<300){
-//        Feedback1 = K1.getP().value();
-// //        Serial.print("centering..");
-// //        Serial.println(Feedback1);
-//        K1.s(100);
-//   }
+  K1.home();
+  while(Feedback1<300){
+       Feedback1 = K1.getP().value();
+//        Serial.print("centering..");
+//        Serial.println(Feedback1);
+       K1.s(100);
+  }
      //Read all stored Parameters from EEPROM
 
     ReadEEProm();
@@ -1962,55 +1968,64 @@ void loop()
         PIDProcessCounter++;
         if (PIDProcessCounter >= PIDProcessDivider)
         {
-//         PIDProcessCounter=0;
+        PIDProcessCounter=0;
               
               
-//               limitUpState1 = digitalRead(limitUp1);
-//               limitDownState1 = digitalRead(limitDown1);
+              limitUpState1 = digitalRead(limitUp1);
+              limitDownState1 = digitalRead(limitDown1);
 
-//              digitalWrite(ledPin, LOW);
-//              Feedback1 = K1.getP().value();
+             digitalWrite(ledPin, LOW);
+             Feedback1 = K1.getP().value();
+             Serial.print("{");
+            Serial.print(String(Feedback1));
+            Serial.print("-");
+            Serial.print(String(PreFeedback1));
+            Serial.print("}");
 
-//             if(Feedback1 < -10 || Feedback1 > 700 ){
-//               digitalWrite(ledPin, HIGH);
-//               K1.s(0);
-//             }else if (Feedback1 - PreFeedback1 > 100){
-// //              Serial.print(Feedback1);
-// //              Serial.print("--");
-// //              Serial.println(Feedback1 - PreFeedback1);
-//              digitalWrite(ledPin, HIGH);
+            if(Feedback1 < -10 || Feedback1 > 700 ){
+              digitalWrite(ledPin, HIGH);
+              K1.s(0);
+            }else if (Feedback1 - PreFeedback1 > 100){
+//              Serial.print(Feedback1);
+//              Serial.print("--");
+//              Serial.println(Feedback1 - PreFeedback1);
+             digitalWrite(ledPin, HIGH);
+             K1.s(0);
               
-//             }else{ 
+            }else{ 
              
 
-// //              ST[0].setTimeout(500);
-//                 if (limitUpState1 == HIGH) {
-                
-//                     if(currentMillis - previousMillis > 300){
-//                     digitalWrite(ledPin, HIGH);
-//                     K1.s(0);
-//                  }else{
-//                     K1.s(-100);
-//                  }
+//              ST[0].setTimeout(500);
+                if (limitUpState1 == HIGH) {
+                    
+                    if(currentMillis - previousMillis > 300){
+                    digitalWrite(ledPin, HIGH);
+                    K1.s(0);
+                    }else{
+                        K1.s(-100);
+                    }
                
-//                 }else if(limitDownState1 == HIGH){
-//                     if(currentMillis - previousMillis > 300){
-//                     digitalWrite(ledPin, HIGH);
-//                     K1.s(0);
-//                  }else{
-//                     K1.s(100);
-//                  }
-//                 } else {
-//                     digitalWrite(ledPin, LOW);
-//                     Feedback1 = K1.getP().value();
+                }else if(limitDownState1 == HIGH){
+                    if(currentMillis - previousMillis > 300){
+                    // Serial.write("{high}");
+                    digitalWrite(ledPin, HIGH);
+                    K1.s(0);
+                 }else{
+                    K1.s(100);
+                 }
+                } else {
+                    digitalWrite(ledPin, LOW);
+                    Feedback1 = K1.getP().value();
                         
-//                     PWMout1=CalcMotor1PID(Target1,Feedback1);
-//                     SetOutputsMotor1();
+                    PWMout1=CalcMotor1PID(Target1,Feedback1);
+                    SetOutputsMotor1();
                 
 
-//                     previousMillis = currentMillis;
-//                 }
-//             }   
+                    previousMillis = currentMillis;
+                }
+            } 
+
+            PreFeedback1 =   Feedback1;
           
         }
 
