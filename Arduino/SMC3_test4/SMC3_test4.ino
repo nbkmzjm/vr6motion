@@ -1884,12 +1884,11 @@ void loop()
   };
 
   K1.home();
-  while(Feedback1<300){
-       Feedback1 = K1.getP().value();
-//        Serial.print("centering..");
-//        Serial.println(Feedback1);
-       K1.s(100);
-  }
+  K1.powerDown();
+//   while(Feedback1<300){
+//        Feedback1 = K1.getP().value();
+//        K1.s(100);
+//   }
      //Read all stored Parameters from EEPROM
 
     ReadEEProm();
@@ -1979,53 +1978,54 @@ void loop()
              Serial.print("{");
             Serial.print(String(Feedback1));
             Serial.print("-");
-            Serial.print(String(PreFeedback1));
+            Serial.print(String(abs(Feedback1-PreFeedback1)));
             Serial.print("}");
 
-            if(Feedback1 < -10 || Feedback1 > 700 ){
-              digitalWrite(ledPin, HIGH);
-              K1.s(0);
-            }else if (Feedback1 - PreFeedback1 > 100){
-//              Serial.print(Feedback1);
-//              Serial.print("--");
-//              Serial.println(Feedback1 - PreFeedback1);
-             digitalWrite(ledPin, HIGH);
-             K1.s(0);
+//             if(Feedback1 < -10 || Feedback1 > 700 ){
+//               digitalWrite(ledPin, HIGH);
+//               K1.s(0);
+//             }else if (Feedback1 - PreFeedback1 > 4){
+// //              Serial.print(Feedback1);
+// //              Serial.print("--");
+// //              Serial.println(Feedback1 - PreFeedback1);
+//              digitalWrite(ledPin, HIGH);
+//              K1.powerDown();
               
-            }else{ 
+//             }else{ 
              
 
-//              ST[0].setTimeout(500);
-                if (limitUpState1 == HIGH) {
+// //              ST[0].setTimeout(500);
+//                 if (limitUpState1 == HIGH) {
                     
-                    if(currentMillis - previousMillis > 300){
-                    digitalWrite(ledPin, HIGH);
-                    K1.s(0);
-                    }else{
-                        K1.s(-100);
-                    }
+//                     if(currentMillis - previousMillis > 300){
+//                     digitalWrite(ledPin, HIGH);
+//                     K1.s(0);
+//                     }else{
+//                         K1.s(-100);
+//                     }
                
-                }else if(limitDownState1 == HIGH){
-                    if(currentMillis - previousMillis > 300){
-                    // Serial.write("{high}");
-                    digitalWrite(ledPin, HIGH);
-                    K1.s(0);
-                 }else{
-                    K1.s(100);
-                 }
-                } else {
-                    digitalWrite(ledPin, LOW);
-                    Feedback1 = K1.getP().value();
+//                 }else if(limitDownState1 == HIGH){
+//                     if(currentMillis - previousMillis > 300){
+//                     // Serial.write("{high}");
+//                     digitalWrite(ledPin, HIGH);
+//                     K1.s(0);
+//                  }else{
+//                     K1.s(100);
+//                  }
+//                 } else {
+//                     digitalWrite(ledPin, LOW);
+//                     Feedback1 = K1.getP().value();
                         
-                    PWMout1=CalcMotor1PID(Target1,Feedback1);
-                    SetOutputsMotor1();
+//                     PWMout1=CalcMotor1PID(Target1,Feedback1);
+//                     SetOutputsMotor1();
                 
 
-                    previousMillis = currentMillis;
-                }
-            } 
+//                     previousMillis = currentMillis;
+//                 }
+//                 PreFeedback1 =   Feedback1;
+//             } 
 
-            PreFeedback1 =   Feedback1;
+            
           
         }
 
