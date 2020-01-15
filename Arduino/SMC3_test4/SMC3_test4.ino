@@ -195,7 +195,7 @@ int InputClipMin2 = 100;      // The input position beyond which the target inpu
 int InputClipMin3 = 100;      // The input position beyond which the target input is clipped
 
 
-int LiftFactor1 = 0;   // was 10 - Increase PWM when driving motor in direction it has to work harder 
+int LiftFactor1 = 10;   // was 10 - Increase PWM when driving motor in direction it has to work harder 
 int LiftFactor2 = 0;   // was 10 - Increase PWM when driving motor in direction it has to work harder
 
 int PIDProcessDivider = 1;  // divider for the PID process timer
@@ -589,7 +589,7 @@ void ReadEEProm()
     CutoffLimitMin1 = EEPROM.read(1);
     InputClipMin1 = EEPROM.read(2);
     CutoffLimitMax1 = 1023-CutoffLimitMin1;
-    InputClipMax1 = 1023-InputClipMin1;
+    InputClipMax1 = 823-InputClipMin1;
     
     DeadZone1=EEPROM.read(5);
     CutoffLimitMin2 = EEPROM.read(6);
@@ -1028,7 +1028,7 @@ void ParseCommand(int ComPort)
             CutoffLimitMin1=RxBuffer[1][ComPort];
             CutoffLimitMax1=1023-CutoffLimitMin1;
             InputClipMin1=RxBuffer[2][ComPort];
-            InputClipMax1=1023-InputClipMin1;
+            InputClipMax1=823-InputClipMin1;
             break;
         case 'T':
             CutoffLimitMin2=RxBuffer[1][ComPort];
@@ -1978,11 +1978,11 @@ void loop()
             // Serial.print(String(abs(Feedback1-PreFeedback1)));
             // Serial.print("}");
 
-            if(Feedback1 < -10 || Feedback1 > 800 ){
+            if(Feedback1 < -15 || Feedback1 > 800 ){
               digitalWrite(ledPin, HIGH);
-              K1.s(0);
+              K1.powerDown();
               
-            }else if (Feedback1 - PreFeedback1 > 10){
+            }else if (Feedback1 - PreFeedback1 > 15){
 //              Serial.print(Feedback1);
 //              Serial.print("--");
 //              Serial.println(Feedback1 - PreFeedback1);
