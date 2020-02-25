@@ -113,8 +113,8 @@ int PreFeedback1 = 512;
 int PreFeedback2 = 512;
 int Feedback3 = 512;
 
-int Target1 = 300;
-int Target2 = 300;
+int Target1 = 512;
+int Target2 = 512;
 int Target3 = 512;
 int PotInput = 512;
 int OffsetAdjust=0;
@@ -455,8 +455,12 @@ else
    mySerial.begin(19200);
    mySerial.listen();
    K1.start();
-   K1.units(10, 250);
+   K1.units(15, 250);
    K1.home();
+
+   K2.start();
+   K2.units(15, 250);
+   K2.home();
    
 //  if (digitalRead(11) == HIGH){
 ////    ST[0].setTimeout(100);
@@ -590,7 +594,7 @@ void ReadEEProm()
     CutoffLimitMin1 = EEPROM.read(1);
     InputClipMin1 = EEPROM.read(2);
     CutoffLimitMax1 = 1023-CutoffLimitMin1;
-    InputClipMax1 = 823-InputClipMin1;
+    InputClipMax1 = 1023-InputClipMin1;
     
     DeadZone1=EEPROM.read(5);
     CutoffLimitMin2 = EEPROM.read(6);
@@ -1029,7 +1033,7 @@ void ParseCommand(int ComPort)
             CutoffLimitMin1=RxBuffer[1][ComPort];
             CutoffLimitMax1=1023-CutoffLimitMin1;
             InputClipMin1=RxBuffer[2][ComPort];
-            InputClipMax1=823-InputClipMin1;
+            InputClipMax1=1023-InputClipMin1;
             break;
         case 'T':
             CutoffLimitMin2=RxBuffer[1][ComPort];
@@ -1552,12 +1556,12 @@ void SetOutputsMotor1()     // MODE3
    if((Feedback1 > InputClipMax1) && (PWMrev1 != 0))
    {
        PWMout1 = PWMrev1;
-       K1.s(-(constrain((PWMout1*2),-500,500)));
+       K1.s(-(constrain((PWMout1*3),-750,750)));
    }
    else if((Feedback1<InputClipMin1) && (PWMrev1 != 0))
    {
        PWMout1 = PWMrev1;
-       K1.s((constrain((PWMout1*2),-500,500)));
+       K1.s((constrain((PWMout1*3),-750,750)));
    }  
    else if((Target1 > (Feedback1 + DeadZone1)) || (Target1 < (Feedback1 - DeadZone1)))
    {
@@ -1565,14 +1569,14 @@ void SetOutputsMotor1()     // MODE3
         {     
             PWMout1+=PWMoffset1;
             if(PWMout1 > (PWMmax1+LiftFactor1)){PWMout1=PWMmax1+LiftFactor1;}
-            K1.s((constrain((PWMout1*2),-500,500)));
+            K1.s((constrain((PWMout1*3),-750,750)));
         }  
         else 
         {                            
             PWMout1 = abs(PWMout1);
             PWMout1+=PWMoffset1;
             if(PWMout1 > PWMmax1){PWMout1=PWMmax1;}
-            K1.s(-(constrain((PWMout1*2),-500,500)));
+            K1.s(-(constrain((PWMout1*3),-750,750)));
         }
    }
    else
@@ -1589,12 +1593,12 @@ void SetOutputsMotor2()     // MODE3
    if((Feedback2 > InputClipMax2) && (PWMrev2 != 0))
    {
        PWMout2 = PWMrev2;
-       K2.s(-(constrain((PWMout2*2),-500,500)));
+       K2.s(-(constrain((PWMout2*3),-750,750)));
    }
    else if((Feedback2<InputClipMin2) && (PWMrev2 != 0))
    {
        PWMout2 = PWMrev2;
-       K2.s((constrain((PWMout2*2),-500,500)));
+       K2.s((constrain((PWMout2*3),-750,750)));
    }  
    else if((Target2 > (Feedback2 + DeadZone2)) || (Target2 < (Feedback2 - DeadZone2)))
    {
@@ -1602,14 +1606,14 @@ void SetOutputsMotor2()     // MODE3
         {     
             PWMout2+=PWMoffset2;
             if(PWMout2 > (PWMmax2+LiftFactor2)){PWMout2=PWMmax2+LiftFactor2;}
-            K2.s((constrain((PWMout2*2),-500,500)));
+            K2.s((constrain((PWMout2*3),-750,750)));
         }  
         else 
         {                            
             PWMout2 = abs(PWMout2);
             PWMout2+=PWMoffset2;
             if(PWMout2 > PWMmax2){PWMout2=PWMmax2;}
-            K2.s(-(constrain((PWMout2*2),-500,500)));
+            K2.s(-(constrain((PWMout2*3),-750,750)));
         }
    }
    else
@@ -1619,7 +1623,7 @@ void SetOutputsMotor2()     // MODE3
        K2.s(0);   
    }
 }
-}
+
 
 
 // void SetOutputsMotor3()       // MODE3
@@ -1968,11 +1972,11 @@ void loop()
               
             Feedback1 = K1.getP().value();
 
-            if(Feedback1 < -15 || Feedback1 > 800 ){
+            if(Feedback1 < -10 || Feedback1 > 1024 ){
               digitalWrite(ledPin, HIGH);
               K1.powerDown();
               
-            }else if (Feedback1 - PreFeedback1 > 15){
+            }else if (Feedback1 - PreFeedback1 > 40){
              digitalWrite(ledPin, HIGH);
              K1.powerDown();
               
@@ -1992,11 +1996,11 @@ void loop()
 
             Feedback2 = K2.getP().value();
 
-            if(Feedback2 < -15 || Feedback2 > 800 ){
+            if(Feedback2 < -10 || Feedback2 > 1024 ){
               digitalWrite(ledPin, HIGH);
               K2.powerDown();
               
-            }else if (Feedback1 - PreFeedback2 > 15){
+            }else if (Feedback2 - PreFeedback2 > 40){
              digitalWrite(ledPin, HIGH);
              K2.powerDown();
               
@@ -2005,10 +2009,10 @@ void loop()
 //              ST[0].setTimeout(500);
                 
                 digitalWrite(ledPin, LOW);
-                Feedback1 = K2.getP().value();
+                Feedback2 = K2.getP().value();
                     
                 PWMout2=CalcMotor2PID(Target2,Feedback2);
-                SetOutputsMotor1();
+                SetOutputsMotor2();
                 
                 PreFeedback2 =   Feedback2;
             } 

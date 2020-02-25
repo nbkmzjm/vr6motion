@@ -308,29 +308,51 @@ namespace vr6Motion
                 comboxMotor.IsEnabled = true;
                 MotorOff.IsEnabled = true;
 
-                //string selectedPort = comboxSelectPort.SelectedItem.ToString();
-
-                port = new SerialPort("COM14", 19200, Parity.None, 8, StopBits.One);
-                port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
-                port.Encoding = Encoding.GetEncoding(28591);
-                
-                try {
-                    port.Open();
+                if (comboxSelectPort.SelectedItem == null){
+                    MessageBox.Show("Please select COM port");
+                    isConnected = false;
                 }
-                catch (Exception ex)
+                else
                 {
-                   
+                    string selectedPort = String.IsNullOrEmpty(comboxSelectPort.SelectedItem.ToString()) ? "COM14" : comboxSelectPort.SelectedItem.ToString();
+
+                    if (selectedPort == null)
+                    {
+                        MessageBox.Show("lease select a COM port!");
+                    }
+                    else
+                    {
+                        port = new SerialPort(selectedPort, 19200, Parity.None, 8, StopBits.One);
+                        port.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
+                        port.Encoding = Encoding.GetEncoding(28591);
+
+                        try
+                        {
+                            port.Open();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.ToString());
+                        }
+                    }
+
+                    //port.Write("START\n");
+                    aTimer.Elapsed += new ElapsedEventHandler(saveParam);
+                    aTimer.Interval = 3000;
+
+                    rndTimer.Elapsed += new ElapsedEventHandler(generateNumber);
+                    rndTimer.Interval = 300;
+
+                    connectPortBtn.Content = "Disconnect";
+                    comboxSelectPort.IsEnabled = false;
+
                 }
-                
-                //port.Write("START\n");
-                aTimer.Elapsed += new ElapsedEventHandler(saveParam);
-                aTimer.Interval = 3000;
 
-                rndTimer.Elapsed += new ElapsedEventHandler(generateNumber);
-                rndTimer.Interval = 300;
 
-                connectPortBtn.Content = "Disconnect";
-                comboxSelectPort.IsEnabled = false;
+
+
+
+               
                 
             }
             else
@@ -350,8 +372,8 @@ namespace vr6Motion
             MotorOff.IsEnabled = true;
             connectPortBtn.Content = "Connect";
             port.Write("[mo0]");
-            sendOneVal("A", 350);
-            sendOneVal("B", 350);
+            sendOneVal("A", 500);
+            sendOneVal("B", 500);
             
 
 
@@ -572,7 +594,7 @@ namespace vr6Motion
         private void selectOption_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string val = comboxMotor.SelectedValue.ToString();
-            TargetSlider.Value = 350;
+            TargetSlider.Value = 500;
             if (val == "1")
             {
 
